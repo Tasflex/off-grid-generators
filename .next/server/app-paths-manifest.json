@@ -1,9 +1,0 @@
-{
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/calculators/battery-runtime/page": "app/calculators/battery-runtime/page.js",
-  "/products/solar-generators/page": "app/products/solar-generators/page.js",
-  "/products/battery-backups/page": "app/products/battery-backups/page.js",
-  "/products/portable-power-stations/page": "app/products/portable-power-stations/page.js"
-}
