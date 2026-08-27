@@ -2,13 +2,13 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Wallet, TrendingUp, Info, Calculator } from 'lucide-react'
-import { calculateBudget } from '../../../lib/calculators'
+import { Wallet, TrendingUp, Calculator, Info, AlertTriangle, Check, ArrowRight, Home, Caravan, Camp } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
-export default function OffGridBudgetCalculator() {
+export default function OffGridBudgetCalculatorPage() {
   const [dailyLoad, setDailyLoad] = useState(3000)
   const [backupDays, setBackupDays] = useState(3)
+  const [systemType, setSystemType] = useState('home')
   const [results, setResults] = useState(null)
 
   const loadOptions = [
@@ -16,27 +16,49 @@ export default function OffGridBudgetCalculator() {
     { label: 'Basic Camping (Lights + Fridge)', value: 1500 },
     { label: 'RV / Van Life (Standard)', value: 3000 },
     { label: 'Home Emergency Backup', value: 5000 },
-    { label: 'Full Off-Grid Home', value: 10000 },
+    { label: 'Full Off-Grid Home', value: 10000 }
   ]
 
   const daysOptions = [1, 2, 3, 5, 7, 14]
 
-  const handleCalculate = () => {
+  const systemTypes = [
+    { id: 'camping', label: 'Camping', icon: Camp, description: 'Weekend trips, 1-2 devices' },
+    { id: 'vanlife', label: 'Van Life', icon: Caravan, description: 'Full-time mobile living' },
+    { id: 'home', label: 'Home Backup', icon: Home, description: 'Emergency power for your house' }
+  ]
+
+  const calculate = () => {
     if (dailyLoad <= 0 || backupDays <= 0) {
       toast.error('Please enter valid values')
       return
     }
 
-    const result = calculateBudget(dailyLoad, 1, backupDays)
-    setResults(result)
+    const totalRequired = dailyLoad * backupDays
+    const batteryCost = totalRequired * 0.5
+    const solarCost = totalRequired * 0.3
+    const inverterCost = systemType === 'home' ? 800 : systemType === 'vanlife' ? 500 : 300
+    const installationCost = systemType === 'home' ? totalRequired * 0.1 : 0
+    const totalCost = batteryCost + solarCost + inverterCost + installationCost
+
+    setResults({
+      totalRequired: Math.round(totalRequired),
+      batteryCost: Math.round(batteryCost),
+      solarCost: Math.round(solarCost),
+      inverterCost,
+      installationCost: Math.round(installationCost),
+      totalCost: Math.round(totalCost),
+      monthlySavings: calculateMonthlySavings(totalRequired, systemType)
+    })
   }
 
-  const selectLoad = (value) => {
-    setDailyLoad(value)
+  const calculateMonthlySavings = (totalWh, type) => {
+    // Estimated savings from using solar vs traditional power
+    const savingsPerDay = type === 'home' ? 5 : type === 'vanlife' ? 8 : 3
+    return Math.round(savingsPerDay * 30)
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-7xl mx-auto">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-4">
         <Link href="/" className="hover:text-blue-600">Home</Link>
@@ -50,41 +72,61 @@ export default function OffGridBudgetCalculator() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-3">Off-Grid Budget Calculator</h1>
         <p className="text-gray-600">
-          Estimate the total cost of your off-grid solar system based on your energy needs and backup requirements.
+          Estimate the total cost of your off-grid solar system based on your energy needs.
         </p>
       </div>
 
-      {/* Calculator Section */}
+      {/* System Type Selection */}
+      <div className="ebay-card p-6 mb-6">
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Select Your Use Case</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {systemTypes.map(type => {
+            const Icon = type.icon
+            return (
+              <button
+                key={type.id}
+                onClick={() => setSystemType(type.id)}
+                className={`p-4 border rounded-lg text-left transition ${
+                  systemType === type.id
+                    ? 'border-blue-600 bg-blue-50'
+                    : 'border-gray-300 hover:border-blue-400'
+                }`}
+              >
+                <Icon className="h-6 w-6 text-blue-600 mb-2" />
+                <div className="font-semibold text-gray-900">{type.label}</div>
+                <div className="text-sm text-gray-600">{type.description}</div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Calculator */}
       <div className="ebay-card p-6 mb-8">
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Input Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Input */}
           <div>
             <h2 className="text-lg font-bold text-gray-900 mb-4">System Requirements</h2>
             
-            {/* Daily Load */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Daily Energy Consumption (Wh/day)
               </label>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="number"
-                  value={dailyLoad}
-                  onChange={(e) => setDailyLoad(parseFloat(e.target.value))}
-                  className="ebay-input"
-                  min="1"
-                />
-                <span className="text-gray-500">Wh</span>
-              </div>
+              <input
+                type="number"
+                value={dailyLoad}
+                onChange={(e) => setDailyLoad(parseFloat(e.target.value))}
+                className="ebay-input"
+                min="100"
+              />
               
-              {/* Quick select */}
               <div className="mt-3">
                 <p className="text-xs text-gray-500 mb-2">Common setups:</p>
                 <div className="space-y-2">
                   {loadOptions.map(option => (
                     <button
                       key={option.value}
-                      onClick={() => selectLoad(option.value)}
+                      onClick={() => setDailyLoad(option.value)}
                       className={`w-full text-left px-3 py-2 text-sm rounded-lg border ${
                         dailyLoad === option.value
                           ? 'bg-blue-600 text-white border-blue-600'
@@ -98,7 +140,6 @@ export default function OffGridBudgetCalculator() {
               </div>
             </div>
 
-            {/* Backup Days */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Days of Backup Needed
@@ -114,94 +155,78 @@ export default function OffGridBudgetCalculator() {
                         : 'border-gray-300 text-gray-600 hover:border-blue-600'
                     }`}
                   >
-                    {days} days
+                    {days} {days === 1 ? 'Day' : 'Days'}
                   </button>
                 ))}
               </div>
             </div>
 
-            <button
-              onClick={handleCalculate}
-              className="ebay-btn-primary w-full"
-            >
+            <button onClick={calculate} className="ebay-btn-primary w-full py-4">
+              <Calculator className="inline h-5 w-5 mr-2" />
               Calculate Budget
             </button>
           </div>
 
-          {/* Results Section */}
+          {/* Results */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h2 className="text-lg font-bold text-gray-900 mb-4">Cost Estimate</h2>
             
             {results ? (
               <div className="space-y-6">
-                {/* Total Cost */}
                 <div className="bg-white rounded-lg p-4 text-center">
                   <div className="text-4xl font-bold text-green-600 mb-2">
-                    ${results.estimatedCost.toLocaleString()}
+                    ${results.totalCost.toLocaleString()}
                   </div>
                   <div className="text-gray-600">Estimated Total Cost</div>
                 </div>
 
-                {/* Breakdown */}
                 <div className="bg-white rounded-lg p-4">
                   <h3 className="font-semibold text-gray-900 mb-3">Cost Breakdown</h3>
                   <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Battery System</span>
-                        <span className="font-semibold">${Math.round(results.breakdown.battery).toLocaleString()}</span>
+                    {[
+                      { label: 'Battery System', amount: results.batteryCost, color: 'bg-blue-600' },
+                      { label: 'Solar Panels', amount: results.solarCost, color: 'bg-yellow-500' },
+                      { label: 'Inverter', amount: results.inverterCost, color: 'bg-green-600' },
+                      { label: 'Installation', amount: results.installationCost, color: 'bg-purple-600' }
+                    ].map(item => (
+                      <div key={item.label}>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-gray-600">{item.label}</span>
+                          <span className="font-semibold">${item.amount.toLocaleString()}</span>
+                        </div>
+                        <div className="bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`${item.color} rounded-full h-2`}
+                            style={{ width: `${(item.amount / results.totalCost) * 100}%` }}
+                          ></div>
+                        </div>
                       </div>
-                      <div className="bg-gray-200 rounded-full h-2">
-                        <div className="bg-blue-600 rounded-full h-2" style={{ width: `${(results.breakdown.battery / results.estimatedCost) * 100}%` }}></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Solar Panels</span>
-                        <span className="font-semibold">${Math.round(results.breakdown.solar).toLocaleString()}</span>
-                      </div>
-                      <div className="bg-gray-200 rounded-full h-2">
-                        <div className="bg-yellow-400 rounded-full h-2" style={{ width: `${(results.breakdown.solar / results.estimatedCost) * 100}%` }}></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Inverter</span>
-                        <span className="font-semibold">${results.breakdown.inverter.toLocaleString()}</span>
-                      </div>
-                      <div className="bg-gray-200 rounded-full h-2">
-                        <div className="bg-green-500 rounded-full h-2" style={{ width: `${(results.breakdown.inverter / results.estimatedCost) * 100}%` }}></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Installation & Accessories</span>
-                        <span className="font-semibold">${Math.round(results.breakdown.installation).toLocaleString()}</span>
-                      </div>
-                      <div className="bg-gray-200 rounded-full h-2">
-                        <div className="bg-purple-500 rounded-full h-2" style={{ width: `${(results.breakdown.installation / results.estimatedCost) * 100}%` }}></div>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* System Size */}
                 <div className="bg-white rounded-lg p-4">
-                  <div className="text-sm text-gray-600 mb-2">
-                    Total System Size Required:
-                  </div>
+                  <div className="text-sm text-gray-600 mb-2">Total System Size Required:</div>
                   <div className="text-2xl font-bold text-gray-900">
-                    {Math.round(results.totalRequiredWh).toLocaleString()} Wh
+                    {results.totalRequired.toLocaleString()} Wh
                   </div>
                   <div className="text-xs text-gray-500 mt-1">
                     Battery bank capacity needed
                   </div>
                 </div>
 
-                {/* Recommendation */}
-                <div className="bg-blue-50 border border-blue-200 rounded p-4 text-sm">
-                  <strong>Budget Tip:</strong> Start with a smaller system and expand later. 
-                  You can begin with just the battery and inverter, then add solar panels as your budget allows.
+                <div className="bg-green-50 border border-green-200 rounded p-4">
+                  <div className="flex items-center">
+                    <TrendingUp className="h-5 w-5 text-green-600 mr-2" />
+                    <div>
+                      <div className="text-sm font-semibold text-green-800">
+                        Estimated Monthly Savings
+                      </div>
+                      <div className="text-lg font-bold text-green-700">
+                        ${results.monthlySavings}/month
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -216,18 +241,15 @@ export default function OffGridBudgetCalculator() {
         </div>
       </div>
 
-      {/* Cost-Saving Tips */}
+      {/* Cost Saving Tips */}
       <div className="ebay-card p-6 mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-          <TrendingUp className="h-5 w-5 text-green-600 mr-2" />
-          Cost-Saving Strategies
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h2 className="text-lg font-bold text-gray-900 mb-4">Cost-Saving Strategies</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h3 className="font-semibold text-gray-900 mb-2">Phase Your Purchase</h3>
             <p className="text-sm text-gray-600">
-              Start with a smaller portable power station for emergency backup, then add a larger 
-              battery bank and solar panels later. This spreads the cost over time.
+              Start with a smaller portable power station for emergency backup, then add a larger battery bank 
+              and solar panels later. This spreads the cost over time.
             </p>
           </div>
           <div>
@@ -254,10 +276,11 @@ export default function OffGridBudgetCalculator() {
         </div>
       </div>
 
-      {/* CTA Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-yellow-50 border border-blue-200 rounded-lg p-6 text-center mb-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-2">Ready to Start Your Off-Grid Project?</h2>
-        <p className="text-gray-600 mb-4">Get personalized recommendations based on your budget and needs.</p>
+      {/* CTA */}
+      <div className="ebay-card p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
+        <h2 className="text-xl font-bold text-gray-900 mb-3">
+          Ready to Start Your Off-Grid Project?
+        </h2>
         <div className="flex justify-center space-x-4">
           <Link href="/calculators/solar-sizing" className="ebay-btn-primary">
             Calculate Your System
@@ -266,22 +289,6 @@ export default function OffGridBudgetCalculator() {
             Read Buying Guide
           </Link>
         </div>
-      </div>
-
-      {/* Related Calculators */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Link href="/calculators/solar-sizing" className="ebay-card p-4 hover:shadow-lg transition">
-          <h3 className="font-semibold text-gray-900 mb-1">Solar Sizing Calculator</h3>
-          <p className="text-sm text-gray-600">Find the perfect solar generator for your needs</p>
-        </Link>
-        <Link href="/calculators/battery-runtime" className="ebay-card p-4 hover:shadow-lg transition">
-          <h3 className="font-semibold text-gray-900 mb-1">Battery Runtime Calculator</h3>
-          <p className="text-sm text-gray-600">How long will your battery last?</p>
-        </Link>
-        <Link href="/calculators/solar-panel-layout" className="ebay-card p-4 hover:shadow-lg transition">
-          <h3 className="font-semibold text-gray-900 mb-1">Panel Layout Calculator</h3>
-          <p className="text-sm text-gray-600">Plan your solar panel installation</p>
-        </Link>
       </div>
     </div>
   )

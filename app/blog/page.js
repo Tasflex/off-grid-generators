@@ -24,7 +24,7 @@ const blogPosts = [
     image: '/images/blog/solar-generators-2026.jpg',
     date: '2026-01-15',
     readTime: '12 min read',
-    author: 'Sarah Johnson',
+    author: 'Jordan Mitchell',
     featured: true,
     tags: ['Solar Generators', 'Buying Guide', '2026']
   },
@@ -37,7 +37,7 @@ const blogPosts = [
     image: '/images/blog/blackout-prep.jpg',
     date: '2026-01-10',
     readTime: '8 min read',
-    author: 'Mike Chen',
+    author: 'Jordan Mitchell',
     featured: true,
     tags: ['Emergency', 'Blackout', 'Backup Power']
   },
@@ -50,7 +50,7 @@ const blogPosts = [
     image: '/images/blog/van-life-solar.jpg',
     date: '2026-01-05',
     readTime: '15 min read',
-    author: 'Alex Rivera',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Van Life', 'Solar Setup', 'Off-Grid']
   },
@@ -63,7 +63,7 @@ const blogPosts = [
     image: '/images/blog/ecoflow-vs-bluetti.jpg',
     date: '2025-12-28',
     readTime: '10 min read',
-    author: 'Sarah Johnson',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Comparison', 'EcoFlow', 'Bluetti']
   },
@@ -76,7 +76,7 @@ const blogPosts = [
     image: '/images/blog/solar-panels-calculation.jpg',
     date: '2025-12-20',
     readTime: '9 min read',
-    author: 'Mike Chen',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Solar Panels', 'DIY', 'Calculation']
   },
@@ -89,7 +89,7 @@ const blogPosts = [
     image: '/images/blog/battery-technology.jpg',
     date: '2025-12-15',
     readTime: '11 min read',
-    author: 'Alex Rivera',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Battery Technology', 'Storage', 'Education']
   },
@@ -102,7 +102,7 @@ const blogPosts = [
     image: '/images/blog/cpap-backup.jpg',
     date: '2025-12-10',
     readTime: '7 min read',
-    author: 'Sarah Johnson',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['CPAP', 'Medical', 'Backup Power']
   },
@@ -115,7 +115,7 @@ const blogPosts = [
     image: '/images/blog/solar-vs-gas.jpg',
     date: '2025-12-05',
     readTime: '10 min read',
-    author: 'Mike Chen',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Comparison', 'Home Backup', 'Generator']
   },
@@ -128,7 +128,7 @@ const blogPosts = [
     image: '/images/blog/rv-solar-install.jpg',
     date: '2025-11-28',
     readTime: '14 min read',
-    author: 'Alex Rivera',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['RV', 'Installation', 'DIY']
   },
@@ -141,7 +141,7 @@ const blogPosts = [
     image: '/images/blog/solar-trends.jpg',
     date: '2025-11-20',
     readTime: '6 min read',
-    author: 'Sarah Johnson',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Trends', 'Market', '2026']
   },
@@ -154,7 +154,7 @@ const blogPosts = [
     image: '/images/blog/home-battery-backup.jpg',
     date: '2025-11-15',
     readTime: '13 min read',
-    author: 'Mike Chen',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Home Backup', 'Battery', 'Whole Home']
   },
@@ -167,9 +167,61 @@ const blogPosts = [
     image: '/images/blog/camping-solar.jpg',
     date: '2025-11-10',
     readTime: '8 min read',
-    author: 'Alex Rivera',
+    author: 'Jordan Mitchell',
     featured: false,
     tags: ['Camping', 'Portable', 'Gear']
+  },
+  {
+    id: 13,
+    title: 'How Many Watts Does a Refrigerator Use? Complete Guide',
+    excerpt: 'Knowing your refrigerator\'s power requirements is crucial when choosing a solar generator. Here\'s how to calculate your backup needs.',
+    category: 'DIY & Installation',
+    slug: 'how-many-watts-refrigerator',
+    image: '/images/blog/refrigerator-watts.jpg',
+    date: '2026-01-08',
+    readTime: '8 min read',
+    author: 'Jordan Mitchell',
+    featured: false,
+    tags: ['Refrigerator', 'Power', 'Calculation']
+  },
+  {
+    id: 14,
+    title: 'EcoFlow Delta Pro Review: Is It Worth $1,999?',
+    excerpt: 'The Delta Pro is EcoFlow\'s flagship portable power station. We tested it for 3 months to see if it\'s worth the premium price.',
+    category: 'Product Reviews',
+    slug: 'ecoflow-delta-pro-review',
+    image: '/images/blog/ecoflow-delta-pro.jpg',
+    date: '2025-12-25',
+    readTime: '10 min read',
+    author: 'Jordan Mitchell',
+    featured: false,
+    tags: ['EcoFlow', 'Review', 'Delta Pro']
+  },
+  {
+    id: 15,
+    title: 'What Size Solar Generator Do I Need for My House?',
+    excerpt: 'Choosing the right solar generator for your home is critical for emergency preparedness. This guide breaks down the exact calculations.',
+    category: 'Home Backup',
+    slug: 'what-size-solar-generator-house',
+    image: '/images/blog/solar-generator-house.jpg',
+    date: '2026-01-03',
+    readTime: '9 min read',
+    author: 'Jordan Mitchell',
+    featured: false,
+    tags: ['Home Backup', 'Sizing', 'Solar Generator']
+  },
+  {
+    id: 16,
+    title: 'Can a Solar Generator Run a CPAP Machine?',
+    excerpt: 'If you use a CPAP machine, having reliable backup power is a medical necessity. Here\'s everything you need to know.',
+    category: 'Emergency Preparedness',
+    slug: 'cpap-machine-solar-generator',
+    image: '/images/blog/cpap-solar.jpg',
+    date: '2025-12-30',
+    readTime: '7 min read',
+    author: 'Jordan Mitchell',
+    featured: false,
+    tags: ['CPAP', 'Medical', 'Solar Generator']
   }
 ]
 
@@ -262,8 +314,11 @@ export default function BlogPage() {
               className="block ebay-card overflow-hidden hover:shadow-xl transition-all group mb-6"
             >
               <div className="grid md:grid-cols-2 gap-0">
-                <div className="bg-gray-100 h-64 md:h-full flex items-center justify-center">
-                  <div className="text-6xl">⚡</div>
+                <div className="bg-gradient-to-br from-blue-50 to-yellow-50 h-64 md:h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-6xl mb-2">⚡</div>
+                    <div className="text-sm font-semibold text-gray-600">{post.category}</div>
+                  </div>
                 </div>
                 <div className="p-6">
                   <div className="flex items-center space-x-2 mb-3">
@@ -281,6 +336,7 @@ export default function BlogPage() {
                   </h2>
                   <p className="text-gray-600 mb-4">{post.excerpt}</p>
                   <div className="flex items-center text-sm text-gray-500">
+                    <span className="font-medium text-gray-700 mr-3">{post.author}</span>
                     <Clock className="h-4 w-4 mr-1" />
                     {post.readTime}
                     <span className="mx-2">•</span>
@@ -302,8 +358,11 @@ export default function BlogPage() {
             href={`/blog/${post.slug}`}
             className="ebay-card overflow-hidden hover:shadow-xl transition-all group"
           >
-            <div className="bg-gray-100 h-48 flex items-center justify-center relative">
-              <div className="text-5xl">⚡</div>
+            <div className="bg-gradient-to-br from-blue-50 to-yellow-50 h-48 flex items-center justify-center relative">
+              <div className="text-center">
+                <div className="text-5xl mb-2">⚡</div>
+                <div className="text-xs font-semibold text-gray-500">{post.category}</div>
+              </div>
               <span className="absolute top-2 left-2 bg-white/90 text-gray-800 px-2 py-1 rounded text-xs font-semibold">
                 {post.category}
               </span>
@@ -315,6 +374,7 @@ export default function BlogPage() {
               <p className="text-sm text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
               <div className="flex items-center justify-between text-sm text-gray-500">
                 <div className="flex items-center">
+                  <span className="font-medium text-gray-700 mr-3">{post.author}</span>
                   <Clock className="h-4 w-4 mr-1" />
                   {post.readTime}
                 </div>
@@ -358,13 +418,30 @@ export default function BlogPage() {
         </div>
       )}
 
+      {/* Author Bio Section */}
+      <div className="ebay-card p-6 mb-12 bg-gradient-to-r from-blue-50 to-yellow-50">
+        <div className="flex items-center">
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-2xl font-bold text-white mr-4">
+            JM
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">About the Author</h2>
+            <p className="text-sm text-gray-600">
+              Jordan Mitchell is a solar energy expert with 10+ years of experience in renewable energy. 
+              He's tested over 200 solar generators and power stations, helping thousands of readers find 
+              the perfect off-grid solution for their needs.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Newsletter CTA */}
       <div className="ebay-card p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">
           Get the Latest Articles in Your Inbox
         </h2>
         <p className="text-gray-600 mb-4">
-          Join our newsletter for exclusive deals, new product reviews, and expert tips.
+          Join our newsletter for exclusive deals, new product reviews, and expert tips from Jordan.
         </p>
         <form className="max-w-md mx-auto flex space-x-2">
           <input

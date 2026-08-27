@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import ProductCard from '../../../components/ProductCard'
 import { getProductsByCategory } from '../../../lib/products'
-import { SlidersHorizontal, X, Check } from 'lucide-react'
+import { SlidersHorizontal, X } from 'lucide-react'
 
 const filters = {
   brands: ['EcoFlow', 'Bluetti', 'Jackery', 'Renogy', 'Goal Zero'],
@@ -86,6 +86,173 @@ export default function SolarGeneratorsPage() {
     setSelectedPrice([])
   }
 
+  const hasActiveFilters = selectedBrands.length > 0 || selectedCapacity.length > 0 || selectedPrice.length > 0
+
+  // Filter UI component for desktop
+  const FilterSection = () => (
+    <div className="hidden md:block w-64 flex-shrink-0">
+      <div className="sticky top-4">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-semibold text-gray-900">Filters</h3>
+          {hasActiveFilters && (
+            <button 
+              onClick={clearAllFilters} 
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+        
+        <div className="space-y-6">
+          {/* Brand Filter */}
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Brand</h4>
+            <div className="space-y-2">
+              {filters.brands.map(brand => (
+                <label key={brand} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedBrands.includes(brand)}
+                    onChange={() => toggleBrand(brand)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{brand}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          
+          {/* Capacity Filter */}
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Capacity</h4>
+            <div className="space-y-2">
+              {filters.capacity.map(cap => (
+                <label key={cap.label} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedCapacity.includes(cap)}
+                    onChange={() => toggleCapacity(cap)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{cap.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          
+          {/* Price Filter */}
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Price</h4>
+            <div className="space-y-2">
+              {filters.price.map(price => (
+                <label key={price.label} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedPrice.includes(price)}
+                    onChange={() => togglePrice(price)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{price.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Mobile Filter Drawer
+  const MobileFilterDrawer = () => (
+    <div 
+      className={`md:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
+        mobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      }`}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setMobileFiltersOpen(false)} />
+      <div 
+        className={`absolute right-0 top-0 h-full w-80 bg-white p-4 overflow-y-auto transition-transform duration-300 ${
+          mobileFiltersOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-semibold text-gray-900">Filters</h3>
+          <button onClick={() => setMobileFiltersOpen(false)} className="p-1 hover:bg-gray-100 rounded">
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+        
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-sm text-gray-600">
+            {sortedProducts.length} products found
+          </span>
+          {hasActiveFilters && (
+            <button onClick={clearAllFilters} className="text-sm text-blue-600 hover:text-blue-800">
+              Clear All
+            </button>
+          )}
+        </div>
+        
+        <div className="space-y-6">
+          {/* Brand Filter */}
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Brand</h4>
+            <div className="space-y-2">
+              {filters.brands.map(brand => (
+                <label key={brand} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedBrands.includes(brand)}
+                    onChange={() => toggleBrand(brand)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{brand}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          
+          {/* Capacity Filter */}
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Capacity</h4>
+            <div className="space-y-2">
+              {filters.capacity.map(cap => (
+                <label key={cap.label} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedCapacity.includes(cap)}
+                    onChange={() => toggleCapacity(cap)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{cap.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          
+          {/* Price Filter */}
+          <div>
+            <h4 className="font-medium text-gray-900 mb-2">Price</h4>
+            <div className="space-y-2">
+              {filters.price.map(price => (
+                <label key={price.label} className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedPrice.includes(price)}
+                    onChange={() => togglePrice(price)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-gray-700">{price.label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <div>
       {/* Page Header */}
@@ -98,13 +265,18 @@ export default function SolarGeneratorsPage() {
 
       {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-            className="md:hidden flex items-center px-4 py-2 bg-white border rounded-md"
+            onClick={() => setMobileFiltersOpen(true)}
+            className="md:hidden flex items-center gap-2 px-3 py-2 border rounded-md bg-white text-sm"
           >
-            <SlidersHorizontal className="h-4 w-4 mr-2" />
+            <SlidersHorizontal className="h-4 w-4" />
             Filters
+            {hasActiveFilters && (
+              <span className="bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {selectedBrands.length + selectedCapacity.length + selectedPrice.length}
+              </span>
+            )}
           </button>
           <span className="text-sm text-gray-600">
             {sortedProducts.length} products found
@@ -116,7 +288,7 @@ export default function SolarGeneratorsPage() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-2 border rounded-md bg-white text-sm"
+            className="px-3 py-2 border rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="featured">Featured</option>
             <option value="price-low">Price: Low to High</option>
@@ -127,86 +299,35 @@ export default function SolarGeneratorsPage() {
         </div>
       </div>
 
-      {/* Mobile Filters Drawer */}
-      {mobileFiltersOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50" onClick={() => setMobileFiltersOpen(false)}>
-          <div className="absolute right-0 top-0 h-full w-80 bg-white p-4 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold">Filters</h3>
-              <button onClick={() => setMobileFiltersOpen(false)}>
-                <X className="h-6 w-6" />
+      {/* Main Content with Sidebar */}
+      <div className="flex gap-8">
+        {/* Desktop Filters */}
+        <FilterSection />
+
+        {/* Products Grid */}
+        <div className="flex-1">
+          {sortedProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sortedProducts.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-gray-50 rounded-lg">
+              <p className="text-gray-600">No products match your filters.</p>
+              <button 
+                onClick={clearAllFilters} 
+                className="text-blue-600 hover:underline mt-2 font-medium"
+              >
+                Clear all filters
               </button>
             </div>
-            {/* Filter content would go here */}
-            <button onClick={clearAllFilters} className="text-blue-600 mb-4">Clear All</button>
-            <div className="space-y-6">
-              {/* Brand Filter */}
-              <div>
-                <h4 className="font-medium mb-2">Brand</h4>
-                {filters.brands.map(brand => (
-                  <label key={brand} className="flex items-center space-x-2 mb-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedBrands.includes(brand)}
-                      onChange={() => toggleBrand(brand)}
-                      className="rounded"
-                    />
-                    <span className="text-sm">{brand}</span>
-                  </label>
-                ))}
-              </div>
-              
-              {/* Capacity Filter */}
-              <div>
-                <h4 className="font-medium mb-2">Capacity</h4>
-                {filters.capacity.map(cap => (
-                  <label key={cap.label} className="flex items-center space-x-2 mb-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedCapacity.includes(cap)}
-                      onChange={() => toggleCapacity(cap)}
-                      className="rounded"
-                    />
-                    <span className="text-sm">{cap.label}</span>
-                  </label>
-                ))}
-              </div>
-              
-              {/* Price Filter */}
-              <div>
-                <h4 className="font-medium mb-2">Price</h4>
-                {filters.price.map(price => (
-                  <label key={price.label} className="flex items-center space-x-2 mb-2">
-                    <input
-                      type="checkbox"
-                      checked={selectedPrice.includes(price)}
-                      onChange={() => togglePrice(price)}
-                      className="rounded"
-                    />
-                    <span className="text-sm">{price.label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-      )}
-
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
       </div>
 
-      {sortedProducts.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-gray-600">No products match your filters.</p>
-          <button onClick={clearAllFilters} className="text-blue-600 hover:underline mt-2">
-            Clear all filters
-          </button>
-        </div>
-      )}
+      {/* Mobile Filter Drawer */}
+      <MobileFilterDrawer />
 
       {/* Bottom CTA */}
       <div className="mt-12 bg-gray-50 border rounded-lg p-6 text-center">
@@ -216,11 +337,11 @@ export default function SolarGeneratorsPage() {
         <p className="text-gray-600 mb-4">
           Use our calculator to find the exact capacity you need based on your appliances.
         </p>
-        <div className="flex justify-center space-x-4">
-          <Link href="/calculators/solar-sizing" className="ebay-btn-primary">
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href="/calculators/solar-sizing" className="inline-block bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
             Calculate My Needs
           </Link>
-          <Link href="/comparisons/ecoflow-vs-bluetti" className="ebay-btn-secondary">
+          <Link href="/comparisons/ecoflow-vs-bluetti" className="inline-block border border-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-50 transition">
             Compare Top Brands
           </Link>
         </div>

@@ -24,6 +24,7 @@ const guideCategories = [
       { title: 'How to Choose a Solar Generator', href: '/guides/how-to-choose-solar-generator' },
       { title: 'How to Wire a Solar System', href: '/guides/how-to-wire-solar-system' },
       { title: 'How to Install Solar Panels', href: '/guides/how-to-install-solar-panels' },
+      { title: 'How to Calculate Battery Runtime', href: '/guides/calculate-battery-runtime' },
     ]
   },
   {

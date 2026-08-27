@@ -1,14 +1,17 @@
 'use client'
 
+import { useState } from 'react'
 import Calculator from '../components/Calculator'
 import ProductCard from '../components/ProductCard'
+import SearchModal from '../components/SearchModal'
 import { getProductsByCategory } from '../lib/products'
 import Link from 'next/link'
-import { ArrowRight, Calculator as CalculatorIcon, Zap, Battery, Sun } from 'lucide-react'
+import { ArrowRight, Calculator as CalculatorIcon, Zap, Battery, Sun, Search } from 'lucide-react'
 
 export default function HomePage() {
   const featuredProducts = getProductsByCategory('solarGenerators').slice(0, 3)
   const portableStations = getProductsByCategory('portablePowerStations').slice(0, 3)
+  const [searchOpen, setSearchOpen] = useState(false)
 
   return (
     <>
@@ -41,6 +44,13 @@ export default function HomePage() {
                 >
                   Browse Products
                 </Link>
+                <button
+                  onClick={() => setSearchOpen(true)}
+                  className="bg-transparent border-2 border-white text-white px-6 py-3 rounded font-semibold hover:bg-white hover:text-blue-600 transition flex items-center"
+                >
+                  <Search className="h-5 w-5 mr-2" />
+                  Search Site
+                </button>
               </div>
             </div>
             <div className="hidden md:flex justify-center">
@@ -216,6 +226,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Search Modal */}
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   )
 }

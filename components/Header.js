@@ -30,6 +30,8 @@ export default function Header() {
         { label: 'Solar Sizing Calculator', href: '/calculators/solar-sizing' },
         { label: 'Battery Runtime Calculator', href: '/calculators/battery-runtime' },
         { label: 'Off-Grid Budget Calculator', href: '/calculators/off-grid-budget' },
+        { label: 'Solar Panel Layout', href: '/calculators/solar-panel-layout' },
+        { label: 'Charge Time Calculator', href: '/calculators/charge-time' },
       ]
     },
     { label: 'Guides', href: '/guides' },
