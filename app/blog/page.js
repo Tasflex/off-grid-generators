@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Search, Calendar, Clock, Tag, TrendingUp, BookOpen, Zap, Wrench, Home, Caravan, Shield } from 'lucide-react'
+import { Search, Calendar, Clock, Tag, TrendingUp, BookOpen, Zap, Wrench, Home, Caravan, Shield, X } from 'lucide-react'
 
 const blogCategories = [
   { name: 'All', slug: 'all', icon: BookOpen },
@@ -13,6 +13,16 @@ const blogCategories = [
   { name: 'DIY & Installation', slug: 'diy-installation', icon: Wrench },
   { name: 'Solar News', slug: 'solar-news', icon: TrendingUp },
 ]
+
+// Map category names to slugs for filtering
+const categorySlugMap = {
+  'Emergency Preparedness': 'emergency-preparedness',
+  'Van Life & RV': 'van-life-rv',
+  'Home Backup': 'home-backup',
+  'Product Reviews': 'product-reviews',
+  'DIY & Installation': 'diy-installation',
+  'Solar News': 'solar-news'
+}
 
 const blogPosts = [
   {
@@ -229,31 +239,111 @@ export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [imageErrors, setImageErrors] = useState({})
   const postsPerPage = 6
 
-  // Filter posts
-  const filteredPosts = blogPosts.filter(post => {
-    if (activeCategory !== 'all' && post.category !== activeCategory) return false
-    if (searchQuery && !post.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) return false
-    return true
-  })
+  // Use useMemo to prevent infinite re-renders
+  const filteredPosts = useMemo(() => {
+    let posts = blogPosts
 
-  // Pagination
+    // Apply category filter
+    if (activeCategory !== 'all') {
+      posts = posts.filter(post => {
+        const postCategorySlug = categorySlugMap[post.category] || post.category.toLowerCase().replace(/\s+/g, '-')
+        return postCategorySlug === activeCategory
+      })
+    }
+
+    // Apply search with relevance scoring
+    if (searchQuery.trim()) {
+      const searchTerms = searchQuery.toLowerCase().trim().split(/\s+/)
+      
+      return posts
+        .map(post => {
+          let score = 0
+          const title = post.title.toLowerCase()
+          const excerpt = post.excerpt.toLowerCase()
+          const category = post.category.toLowerCase()
+          const tags = post.tags.map(t => t.toLowerCase())
+          const author = post.author.toLowerCase()
+
+          for (const term of searchTerms) {
+            if (title.includes(term)) score += 10
+            if (title.startsWith(term)) score += 5
+            if (category.includes(term)) score += 7
+            if (tags.some(t => t.includes(term))) score += 6
+            if (author.includes(term)) score += 4
+            if (excerpt.includes(term)) score += 3
+          }
+
+          return { ...post, score }
+        })
+        .filter(post => post.score > 0)
+        .sort((a, b) => b.score - a.score)
+    }
+
+    return posts
+  }, [activeCategory, searchQuery])
+
   const totalPages = Math.ceil(filteredPosts.length / postsPerPage)
   const currentPosts = filteredPosts.slice(
     (currentPage - 1) * postsPerPage,
     currentPage * postsPerPage
   )
 
-  // Reset pagination when filter changes
   const handleCategoryChange = (category) => {
     setActiveCategory(category)
     setCurrentPage(1)
   }
 
+  const handleImageError = (postId) => {
+    setImageErrors(prev => ({ ...prev, [postId]: true }))
+  }
+
+  const clearSearch = () => {
+    setSearchQuery('')
+    setCurrentPage(1)
+  }
+
+  // Get category color
+  const getCategoryColor = (category) => {
+    const colors = {
+      'Product Reviews': 'from-blue-500 to-blue-700',
+      'Emergency Preparedness': 'from-red-500 to-red-700',
+      'Van Life & RV': 'from-green-500 to-green-700',
+      'Home Backup': 'from-purple-500 to-purple-700',
+      'DIY & Installation': 'from-orange-500 to-orange-700',
+      'Solar News': 'from-yellow-500 to-yellow-700'
+    }
+    return colors[category] || 'from-gray-500 to-gray-700'
+  }
+
+  // Highlight matching text
+  const highlightText = (text, query) => {
+    if (!query || query.trim() === '') return text
+    
+    const terms = query.toLowerCase().trim().split(/\s+/)
+    let result = text
+    
+    for (const term of terms) {
+      const regex = new RegExp(`(${term})`, 'gi')
+      result = result.replace(regex, '<mark class="bg-yellow-200 px-0.5 rounded">$1</mark>')
+    }
+    
+    return result
+  }
+
+  // Get category count
+  const getCategoryCount = (slug) => {
+    if (slug === 'all') return blogPosts.length
+    return blogPosts.filter(p => {
+      const postSlug = categorySlugMap[p.category] || p.category.toLowerCase().replace(/\s+/g, '-')
+      return postSlug === slug
+    }).length
+  }
+
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-4">
         <Link href="/" className="hover:text-blue-600">Home</Link>
@@ -274,63 +364,98 @@ export default function BlogPage() {
         <div className="relative max-w-2xl">
           <input
             type="text"
-            placeholder="Search articles..."
+            placeholder="Search articles by title, category, author, or tags..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              setCurrentPage(1)
+            }}
+            className="w-full px-4 py-3 pl-12 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
           <Search className="absolute left-4 top-3.5 h-5 w-5 text-gray-400" />
+          {searchQuery && (
+            <button
+              onClick={clearSearch}
+              className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
         </div>
+        {searchQuery && (
+          <p className="text-sm text-gray-500 mt-2">
+            Found {filteredPosts.length} result{filteredPosts.length !== 1 ? 's' : ''} for "{searchQuery}"
+            {activeCategory !== 'all' && ` in ${blogCategories.find(c => c.slug === activeCategory)?.name}`}
+          </p>
+        )}
       </div>
 
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2 mb-8">
         {blogCategories.map(category => {
           const Icon = category.icon
+          const isActive = activeCategory === category.slug
+          const count = getCategoryCount(category.slug)
+          
           return (
             <button
               key={category.slug}
               onClick={() => handleCategoryChange(category.slug)}
               className={`flex items-center px-4 py-2 rounded-full text-sm font-medium transition ${
-                activeCategory === category.slug
+                isActive
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               <Icon className="h-4 w-4 mr-2" />
               {category.name}
+              <span className={`ml-2 text-xs ${
+                isActive ? 'text-blue-200' : 'text-gray-400'
+              }`}>
+                ({count})
+              </span>
             </button>
           )
         })}
       </div>
 
-      {/* Featured Post */}
-      {activeCategory === 'all' && !searchQuery && currentPage === 1 && (
+      {/* Featured Post - Only show when not searching and on first page */}
+      {!searchQuery && activeCategory === 'all' && currentPage === 1 && (
         <div className="mb-12">
           {blogPosts.filter(post => post.featured).slice(0, 2).map(post => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
-              className="block ebay-card overflow-hidden hover:shadow-xl transition-all group mb-6"
+              className="block bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all group mb-6"
             >
               <div className="grid md:grid-cols-2 gap-0">
-                <div className="bg-gradient-to-br from-blue-50 to-yellow-50 h-64 md:h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-6xl mb-2">⚡</div>
-                    <div className="text-sm font-semibold text-gray-600">{post.category}</div>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold">
+                <div className={`bg-gradient-to-br ${getCategoryColor(post.category)} h-64 md:h-full flex items-center justify-center relative`}>
+                  {!imageErrors[post.id] ? (
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      onError={() => handleImageError(post.id)}
+                    />
+                  ) : (
+                    <div className="text-center text-white z-10">
+                      <div className="text-6xl mb-2">⚡</div>
+                      <div className="text-sm font-semibold">{post.category}</div>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 z-10">
+                    <span className="bg-white/90 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">
                       {post.category}
                     </span>
                     {post.featured && (
-                      <span className="bg-yellow-400 text-gray-900 px-2 py-1 rounded text-xs font-bold">
+                      <span className="ml-2 bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold">
                         Featured
                       </span>
                     )}
                   </div>
+                </div>
+                <div className="p-6">
                   <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600">
                     {post.title}
                   </h2>
@@ -351,39 +476,92 @@ export default function BlogPage() {
       )}
 
       {/* Blog Posts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {currentPosts.map(post => (
-          <Link
-            key={post.id}
-            href={`/blog/${post.slug}`}
-            className="ebay-card overflow-hidden hover:shadow-xl transition-all group"
-          >
-            <div className="bg-gradient-to-br from-blue-50 to-yellow-50 h-48 flex items-center justify-center relative">
-              <div className="text-center">
-                <div className="text-5xl mb-2">⚡</div>
-                <div className="text-xs font-semibold text-gray-500">{post.category}</div>
+      {currentPosts.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {currentPosts.map(post => (
+            <Link
+              key={post.id}
+              href={`/blog/${post.slug}`}
+              className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all group"
+            >
+              <div className={`bg-gradient-to-br ${getCategoryColor(post.category)} h-48 flex items-center justify-center relative`}>
+                {!imageErrors[post.id] ? (
+                  <img
+                    src={post.image}
+                    alt={post.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={() => handleImageError(post.id)}
+                  />
+                ) : (
+                  <div className="text-center text-white z-10">
+                    <div className="text-5xl mb-2">⚡</div>
+                    <div className="text-xs font-semibold">{post.category}</div>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <span className="absolute top-2 left-2 bg-white/90 text-gray-800 px-2 py-1 rounded text-xs font-semibold z-10">
+                  {post.category}
+                </span>
+                {searchQuery && post.score > 0 && (
+                  <span className="absolute top-2 right-2 bg-yellow-400 text-gray-900 px-2 py-1 rounded text-xs font-bold z-10">
+                    Match
+                  </span>
+                )}
               </div>
-              <span className="absolute top-2 left-2 bg-white/90 text-gray-800 px-2 py-1 rounded text-xs font-semibold">
-                {post.category}
-              </span>
-            </div>
-            <div className="p-4">
-              <h2 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 line-clamp-2">
-                {post.title}
-              </h2>
-              <p className="text-sm text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-              <div className="flex items-center justify-between text-sm text-gray-500">
-                <div className="flex items-center">
-                  <span className="font-medium text-gray-700 mr-3">{post.author}</span>
-                  <Clock className="h-4 w-4 mr-1" />
-                  {post.readTime}
+              <div className="p-4">
+                <h2 
+                  className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 line-clamp-2"
+                  dangerouslySetInnerHTML={{ 
+                    __html: highlightText(post.title, searchQuery)
+                  }}
+                />
+                <p 
+                  className="text-sm text-gray-600 mb-4 line-clamp-3"
+                  dangerouslySetInnerHTML={{ 
+                    __html: highlightText(post.excerpt, searchQuery)
+                  }}
+                />
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center">
+                    <span className="font-medium text-gray-700 mr-3">{post.author}</span>
+                    <Clock className="h-4 w-4 mr-1" />
+                    {post.readTime}
+                  </div>
+                  <span className="text-blue-600 group-hover:underline">Read More →</span>
                 </div>
-                <span className="text-blue-600 group-hover:underline">Read More →</span>
+                {post.tags && post.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {post.tags.slice(0, 3).map(tag => (
+                      <span key={tag} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-12">
+          <div className="text-6xl mb-4">🔍</div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">No posts found</h3>
+          <p className="text-gray-600">
+            {searchQuery 
+              ? `No results found for "${searchQuery}". Try adjusting your search terms.`
+              : 'No posts match the selected category.'}
+          </p>
+          <button
+            onClick={() => {
+              clearSearch()
+              setActiveCategory('all')
+            }}
+            className="mt-4 text-blue-600 hover:underline"
+          >
+            Clear all filters
+          </button>
+        </div>
+      )}
 
       {/* Pagination */}
       {totalPages > 1 && (
@@ -391,7 +569,7 @@ export default function BlogPage() {
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className="px-4 py-2 border rounded-md disabled:opacity-50"
+            className="px-4 py-2 border rounded-md disabled:opacity-50 hover:bg-gray-50"
           >
             Previous
           </button>
@@ -411,7 +589,7 @@ export default function BlogPage() {
           <button
             onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 border rounded-md disabled:opacity-50"
+            className="px-4 py-2 border rounded-md disabled:opacity-50 hover:bg-gray-50"
           >
             Next
           </button>
@@ -419,7 +597,7 @@ export default function BlogPage() {
       )}
 
       {/* Author Bio Section */}
-      <div className="ebay-card p-6 mb-12 bg-gradient-to-r from-blue-50 to-yellow-50">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-12 bg-gradient-to-r from-blue-50 to-yellow-50">
         <div className="flex items-center">
           <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-2xl font-bold text-white mr-4">
             JM
@@ -436,21 +614,21 @@ export default function BlogPage() {
       </div>
 
       {/* Newsletter CTA */}
-      <div className="ebay-card p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
+      <div className="bg-white rounded-lg border border-gray-200 p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">
           Get the Latest Articles in Your Inbox
         </h2>
         <p className="text-gray-600 mb-4">
           Join our newsletter for exclusive deals, new product reviews, and expert tips from Jordan.
         </p>
-        <form className="max-w-md mx-auto flex space-x-2">
+        <form className="max-w-md mx-auto flex space-x-2" onSubmit={(e) => e.preventDefault()}>
           <input
             type="email"
             placeholder="your@email.com"
             className="flex-1 px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
-          <button type="submit" className="ebay-btn-primary whitespace-nowrap">
+          <button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition whitespace-nowrap">
             Subscribe
           </button>
         </form>
