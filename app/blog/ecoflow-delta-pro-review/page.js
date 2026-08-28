@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Star, Check, X, Zap, Battery, Shield, Timer, ThumbsUp, ThumbsDown } from 'lucide-react'
+import { Star, Check, X, Zap, Battery, Shield, Timer, ThumbsUp, ThumbsDown, Calendar, Clock } from 'lucide-react'
 
 export default function EcoFlowDeltaProReview() {
   const [showSpecs, setShowSpecs] = useState(false)

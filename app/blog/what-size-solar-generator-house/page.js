@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Home, Zap, Battery, Calculator, Info, AlertTriangle, Check } from 'lucide-react'
+import { Home, Calendar, Clock, Zap, Battery, Calculator, Info, AlertTriangle, Check } from 'lucide-react'
 
 export default function WhatSizeSolarGeneratorHouse() {
   const [houseSize, setHouseSize] = useState('medium')

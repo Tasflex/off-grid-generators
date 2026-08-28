@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Calculator, Battery, Wallet, Sun, Timer, Grid, Zap, ArrowRight } from 'lucide-react'
+import { Calculator, Battery, Wallet, Sun, Timer, Grid, Zap, Cpu, ArrowRight } from 'lucide-react'
 
 const calculators = [
   {
@@ -32,6 +32,24 @@ const calculators = [
     features: ['Cost breakdown', 'Monthly savings', 'Phased purchase']
   },
   {
+    title: 'Inverter Sizing Calculator',
+    description: 'Find the right inverter size for your appliances based on running and surge watts.',
+    icon: Zap,
+    href: '/calculators/inverter-sizing',
+    color: 'bg-red-100 text-red-600',
+    popular: true,
+    features: ['Running watts', 'Surge watts', 'Product recommendations']
+  },
+  {
+    title: 'Charge Controller Sizing',
+    description: 'Calculate the right charge controller for your solar array and battery bank.',
+    icon: Cpu,
+    href: '/calculators/charge-controller-sizing',
+    color: 'bg-purple-100 text-purple-600',
+    popular: false,
+    features: ['MPPT/PWM', 'Battery types', 'System sizing']
+  },
+  {
     title: 'Solar Panel Layout Calculator',
     description: 'Calculate how many solar panels you need and plan your panel placement.',
     icon: Grid,
@@ -45,7 +63,7 @@ const calculators = [
     description: 'Calculate how long it takes to charge your generator with solar, AC, or car charging.',
     icon: Timer,
     href: '/calculators/charge-time',
-    color: 'bg-purple-100 text-purple-600',
+    color: 'bg-indigo-100 text-indigo-600',
     popular: false,
     features: ['3 charge methods', 'Efficiency factors', 'Quick estimates']
   }
@@ -53,7 +71,7 @@ const calculators = [
 
 export default function CalculatorsPage() {
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-4">
         <Link href="/" className="hover:text-blue-600">Home</Link>
@@ -77,7 +95,7 @@ export default function CalculatorsPage() {
             <Link
               key={calc.href}
               href={calc.href}
-              className="ebay-card p-6 hover:shadow-xl transition-all group flex flex-col"
+              className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-xl transition-all group flex flex-col"
             >
               <div className="flex items-start mb-4">
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center mr-4 ${calc.color}`}>
@@ -116,7 +134,7 @@ export default function CalculatorsPage() {
       </div>
 
       {/* How to Use */}
-      <div className="ebay-card p-8 mb-12">
+      <div className="bg-white border border-gray-200 rounded-lg p-8 mb-12 shadow-sm">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">How to Use Our Calculators</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -151,14 +169,14 @@ export default function CalculatorsPage() {
       </div>
 
       {/* CTA */}
-      <div className="ebay-card p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
+      <div className="bg-white border border-gray-200 rounded-lg p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center shadow-sm">
         <h2 className="text-xl font-bold text-gray-900 mb-3">
           Need Help Choosing the Right Calculator?
         </h2>
         <p className="text-gray-600 mb-4">
           Read our comprehensive guide on how to calculate your solar power needs.
         </p>
-        <Link href="/guides/how-to-choose" className="ebay-btn-primary inline-block">
+        <Link href="/guides/how-to-choose" className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition font-semibold inline-block">
           Read the Guide
         </Link>
       </div>

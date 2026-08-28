@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { SolarPanel, BatteryCharging, Zap, Plug, Wrench } from 'lucide-react'
+import { Sun, BatteryCharging, Zap, Plug, Wrench, Package, Cpu, AlertTriangle, Box } from 'lucide-react'
 
 const categories = [
   {
@@ -9,7 +9,7 @@ const categories = [
     description: 'Complete portable power stations with built-in inverters',
     href: '/products/solar-generators',
     icon: Zap,
-    count: 45,
+    count: 8,
     image: '/images/categories/solar-generators.jpg'
   },
   {
@@ -17,7 +17,7 @@ const categories = [
     description: 'Compact battery systems for camping and emergencies',
     href: '/products/portable-power-stations',
     icon: BatteryCharging,
-    count: 32,
+    count: 6,
     image: '/images/categories/portable-power.jpg'
   },
   {
@@ -25,23 +25,55 @@ const categories = [
     description: 'Deep-cycle lithium batteries for permanent installs',
     href: '/products/battery-backups',
     icon: BatteryCharging,
-    count: 28,
+    count: 4,
     image: '/images/categories/battery-backups.jpg'
   },
   {
     name: 'Solar Panels',
     description: 'Monocrystalline and polycrystalline panels for all budgets',
     href: '/products/solar-panels',
-    icon: SolarPanel,
-    count: 56,
+    icon: Sun,
+    count: 3,
     image: '/images/categories/solar-panels.jpg'
+  },
+  {
+    name: 'Inverters',
+    description: 'Convert DC battery power to AC for your appliances',
+    href: '/products/inverters',
+    icon: Zap,
+    count: 5,
+    image: '/images/categories/inverters.jpg'
+  },
+  {
+    name: 'Charge Controllers',
+    description: 'Regulate solar charging for safe, efficient battery charging',
+    href: '/products/charge-controllers',
+    icon: Cpu,
+    count: 5,
+    image: '/images/categories/charge-controllers.jpg'
+  },
+  {
+    name: 'Components',
+    description: 'Cables, fuses, connectors, and mounting hardware',
+    href: '/products/components',
+    icon: Wrench,
+    count: 6,
+    image: '/images/categories/components.jpg'
+  },
+  {
+    name: 'Complete Kits',
+    description: 'Everything you need in one package',
+    href: '/products/complete-kits',
+    icon: Package,
+    count: 3,
+    image: '/images/categories/complete-kits.jpg'
   },
   {
     name: 'Accessories',
     description: 'Cables, adapters, mounts, and essential add-ons',
     href: '/products/accessories',
     icon: Plug,
-    count: 89,
+    count: 3,
     image: '/images/categories/accessories.jpg'
   }
 ]

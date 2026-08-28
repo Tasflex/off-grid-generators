@@ -20,6 +20,9 @@ export default function Header() {
         { label: 'Portable Power Stations', href: '/products/portable-power-stations' },
         { label: 'Battery Backups', href: '/products/battery-backups' },
         { label: 'Solar Panels', href: '/products/solar-panels' },
+        { label: 'Charge Controllers', href: '/products/charge-controllers' },
+        { label: 'Inverters', href: '/products/inverters' },
+        { label: 'Complete Kits', href: '/products/complete-kits' },
         { label: 'Accessories', href: '/products/accessories' },
       ]
     },
@@ -32,6 +35,8 @@ export default function Header() {
         { label: 'Off-Grid Budget Calculator', href: '/calculators/off-grid-budget' },
         { label: 'Solar Panel Layout', href: '/calculators/solar-panel-layout' },
         { label: 'Charge Time Calculator', href: '/calculators/charge-time' },
+        { label: 'Charge Controller Sizing', href: '/calculators/charge-controller-sizing' },
+        { label: 'Inverter Sizing', href: '/calculators/inverter-sizing' },
       ]
     },
     { label: 'Guides', href: '/guides' },
