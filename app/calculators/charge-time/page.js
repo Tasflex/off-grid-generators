@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Timer, Calculator, Zap, Sun, Plug, Car, Info, AlertTriangle, ArrowRight } from 'lucide-react'
+import { Timer, Calculator, Zap, Sun, Plug, Car, Info, AlertTriangle, ArrowRight, Check } from 'lucide-react'
+import { getProductsByCategory } from '../../../lib/products'
 import { toast } from 'react-hot-toast'
 
 export default function ChargeTimeCalculatorPage() {
@@ -24,6 +25,18 @@ export default function ChargeTimeCalculatorPage() {
     { label: '400W Panel', value: 400 },
     { label: '800W Panel Array', value: 800 }
   ]
+
+  const getRecommendedProducts = (capacity) => {
+    const allProducts = [
+      ...getProductsByCategory('solarGenerators'),
+      ...getProductsByCategory('portablePowerStations')
+    ]
+
+    // Find products with similar capacity
+    return allProducts
+      .sort((a, b) => Math.abs(a.capacity - capacity) - Math.abs(b.capacity - capacity))
+      .slice(0, 3)
+  }
 
   const calculate = () => {
     if (batteryCapacity <= 0) {
@@ -50,18 +63,22 @@ export default function ChargeTimeCalculatorPage() {
     const hours = Math.floor(chargeTime)
     const minutes = Math.round((chargeTime - hours) * 60)
 
+    // Get product recommendations
+    const recommendedProducts = getRecommendedProducts(batteryCapacity)
+
     setResults({
       chargeTime: chargeTime.toFixed(1),
       hours,
       minutes,
       chargeWatts: Math.round(chargeWatts),
       chargeLabel,
-      fullChargeTime: chargeTime > 0 ? chargeTime.toFixed(1) : 'N/A'
+      fullChargeTime: chargeTime > 0 ? chargeTime.toFixed(1) : 'N/A',
+      recommendedProducts
     })
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-4">
         <Link href="/" className="hover:text-blue-600">Home</Link>
@@ -80,7 +97,7 @@ export default function ChargeTimeCalculatorPage() {
       </div>
 
       {/* Calculator */}
-      <div className="ebay-card p-6 mb-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8 shadow-sm">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input */}
           <div>
@@ -94,7 +111,7 @@ export default function ChargeTimeCalculatorPage() {
                 type="number"
                 value={batteryCapacity}
                 onChange={(e) => setBatteryCapacity(parseFloat(e.target.value))}
-                className="ebay-input"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 min="100"
               />
             </div>
@@ -132,7 +149,7 @@ export default function ChargeTimeCalculatorPage() {
                 <select
                   value={solarWatts}
                   onChange={(e) => setSolarWatts(parseFloat(e.target.value))}
-                  className="ebay-input"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   {solarPanelOptions.map(option => (
                     <option key={option.value} value={option.value}>
@@ -152,7 +169,7 @@ export default function ChargeTimeCalculatorPage() {
                   type="number"
                   value={acWatts}
                   onChange={(e) => setAcWatts(parseFloat(e.target.value))}
-                  className="ebay-input"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   min="100"
                 />
                 <p className="text-xs text-gray-500 mt-1">
@@ -161,7 +178,7 @@ export default function ChargeTimeCalculatorPage() {
               </div>
             )}
 
-            <button onClick={calculate} className="ebay-btn-primary w-full py-4">
+            <button onClick={calculate} className="w-full bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition font-semibold">
               <Calculator className="inline h-5 w-5 mr-2" />
               Calculate Charge Time
             </button>
@@ -210,6 +227,31 @@ export default function ChargeTimeCalculatorPage() {
                     </p>
                   </div>
                 </div>
+
+                {/* Product Recommendations */}
+                {results.recommendedProducts && results.recommendedProducts.length > 0 && (
+                  <div className="bg-white rounded p-4">
+                    <h3 className="font-semibold text-gray-900 mb-3">Similar Products</h3>
+                    <div className="space-y-2">
+                      {results.recommendedProducts.map(product => (
+                        <div key={product.id} className="border rounded p-3 flex items-center justify-between">
+                          <div>
+                            <div className="font-medium text-sm text-gray-900">{product.name}</div>
+                            <div className="text-xs text-gray-500">
+                              {product.capacity}Wh | {product.output}W
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold text-blue-600">${product.price}</div>
+                            <Link href={`/products/${product.id}`} className="text-xs text-blue-600 hover:underline">
+                              View Deal
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center py-12">
@@ -224,7 +266,7 @@ export default function ChargeTimeCalculatorPage() {
       </div>
 
       {/* Tips */}
-      <div className="ebay-card p-6 mb-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8 shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Charging Tips</h2>
         <div className="space-y-3">
           {[
@@ -243,18 +285,18 @@ export default function ChargeTimeCalculatorPage() {
       </div>
 
       {/* CTA */}
-      <div className="ebay-card p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
+      <div className="bg-white rounded-lg border border-gray-200 p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center shadow-sm">
         <h2 className="text-xl font-bold text-gray-900 mb-3">
           Explore More Calculators
         </h2>
-        <div className="flex justify-center space-x-4">
-          <Link href="/calculators/solar-sizing" className="ebay-btn-primary">
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href="/calculators/solar-sizing" className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition font-semibold">
             Solar Sizing
           </Link>
-          <Link href="/calculators/battery-runtime" className="ebay-btn-secondary">
+          <Link href="/calculators/battery-runtime" className="border border-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-50 transition font-semibold">
             Battery Runtime
           </Link>
-          <Link href="/calculators/off-grid-budget" className="ebay-btn-secondary">
+          <Link href="/calculators/off-grid-budget" className="border border-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-50 transition font-semibold">
             Budget Calculator
           </Link>
         </div>

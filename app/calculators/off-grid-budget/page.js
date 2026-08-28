@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Wallet, TrendingUp, Calculator, Info, AlertTriangle, Check, ArrowRight, Home, Caravan, Camp } from 'lucide-react'
+import { Wallet, TrendingUp, Calculator, Info, AlertTriangle, Check, ArrowRight, Home, Caravan, Tent } from 'lucide-react'
+import { getProductsByCategory } from '../../../lib/products'
 import { toast } from 'react-hot-toast'
 
 export default function OffGridBudgetCalculatorPage() {
@@ -22,10 +23,36 @@ export default function OffGridBudgetCalculatorPage() {
   const daysOptions = [1, 2, 3, 5, 7, 14]
 
   const systemTypes = [
-    { id: 'camping', label: 'Camping', icon: Camp, description: 'Weekend trips, 1-2 devices' },
+    { id: 'camping', label: 'Camping', icon: Tent, description: 'Weekend trips, 1-2 devices' },
     { id: 'vanlife', label: 'Van Life', icon: Caravan, description: 'Full-time mobile living' },
     { id: 'home', label: 'Home Backup', icon: Home, description: 'Emergency power for your house' }
   ]
+
+  const getRecommendedProducts = (requiredWh, systemType) => {
+    const allProducts = [
+      ...getProductsByCategory('solarGenerators'),
+      ...getProductsByCategory('portablePowerStations')
+    ]
+
+    // Filter based on system type
+    let filtered = allProducts
+    
+    if (systemType === 'camping') {
+      // Smaller, portable options
+      filtered = allProducts.filter(p => p.capacity < 1000 && p.weight < 20)
+    } else if (systemType === 'vanlife') {
+      // Medium capacity, portable
+      filtered = allProducts.filter(p => p.capacity >= 500 && p.capacity < 3000 && p.weight < 50)
+    } else if (systemType === 'home') {
+      // Large capacity for home backup
+      filtered = allProducts.filter(p => p.capacity >= 1000)
+    }
+
+    // Sort by capacity match (closest to required)
+    return filtered
+      .sort((a, b) => Math.abs(a.capacity - requiredWh) - Math.abs(b.capacity - requiredWh))
+      .slice(0, 3)
+  }
 
   const calculate = () => {
     if (dailyLoad <= 0 || backupDays <= 0) {
@@ -40,6 +67,9 @@ export default function OffGridBudgetCalculatorPage() {
     const installationCost = systemType === 'home' ? totalRequired * 0.1 : 0
     const totalCost = batteryCost + solarCost + inverterCost + installationCost
 
+    // Get product recommendations
+    const recommendedProducts = getRecommendedProducts(totalRequired, systemType)
+
     setResults({
       totalRequired: Math.round(totalRequired),
       batteryCost: Math.round(batteryCost),
@@ -47,18 +77,18 @@ export default function OffGridBudgetCalculatorPage() {
       inverterCost,
       installationCost: Math.round(installationCost),
       totalCost: Math.round(totalCost),
-      monthlySavings: calculateMonthlySavings(totalRequired, systemType)
+      monthlySavings: calculateMonthlySavings(totalRequired, systemType),
+      recommendedProducts
     })
   }
 
   const calculateMonthlySavings = (totalWh, type) => {
-    // Estimated savings from using solar vs traditional power
     const savingsPerDay = type === 'home' ? 5 : type === 'vanlife' ? 8 : 3
     return Math.round(savingsPerDay * 30)
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
       <nav className="text-sm text-gray-500 mb-4">
         <Link href="/" className="hover:text-blue-600">Home</Link>
@@ -77,7 +107,7 @@ export default function OffGridBudgetCalculatorPage() {
       </div>
 
       {/* System Type Selection */}
-      <div className="ebay-card p-6 mb-6">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6 shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Select Your Use Case</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {systemTypes.map(type => {
@@ -102,7 +132,7 @@ export default function OffGridBudgetCalculatorPage() {
       </div>
 
       {/* Calculator */}
-      <div className="ebay-card p-6 mb-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8 shadow-sm">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input */}
           <div>
@@ -116,7 +146,7 @@ export default function OffGridBudgetCalculatorPage() {
                 type="number"
                 value={dailyLoad}
                 onChange={(e) => setDailyLoad(parseFloat(e.target.value))}
-                className="ebay-input"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 min="100"
               />
               
@@ -161,7 +191,7 @@ export default function OffGridBudgetCalculatorPage() {
               </div>
             </div>
 
-            <button onClick={calculate} className="ebay-btn-primary w-full py-4">
+            <button onClick={calculate} className="w-full bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition font-semibold">
               <Calculator className="inline h-5 w-5 mr-2" />
               Calculate Budget
             </button>
@@ -228,6 +258,31 @@ export default function OffGridBudgetCalculatorPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Product Recommendations */}
+                {results.recommendedProducts && results.recommendedProducts.length > 0 && (
+                  <div className="bg-white rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-900 mb-3">Recommended Products</h3>
+                    <div className="space-y-2">
+                      {results.recommendedProducts.map(product => (
+                        <div key={product.id} className="border rounded p-3 flex items-center justify-between">
+                          <div>
+                            <div className="font-medium text-sm text-gray-900">{product.name}</div>
+                            <div className="text-xs text-gray-500">
+                              {product.capacity}Wh | {product.weight}lbs
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold text-blue-600">${product.price}</div>
+                            <Link href={`/products/${product.id}`} className="text-xs text-blue-600 hover:underline">
+                              View Deal
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center py-12">
@@ -242,7 +297,7 @@ export default function OffGridBudgetCalculatorPage() {
       </div>
 
       {/* Cost Saving Tips */}
-      <div className="ebay-card p-6 mb-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8 shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Cost-Saving Strategies</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -277,15 +332,15 @@ export default function OffGridBudgetCalculatorPage() {
       </div>
 
       {/* CTA */}
-      <div className="ebay-card p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
+      <div className="bg-white rounded-lg border border-gray-200 p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center shadow-sm">
         <h2 className="text-xl font-bold text-gray-900 mb-3">
           Ready to Start Your Off-Grid Project?
         </h2>
-        <div className="flex justify-center space-x-4">
-          <Link href="/calculators/solar-sizing" className="ebay-btn-primary">
+        <div className="flex flex-wrap justify-center gap-4">
+          <Link href="/calculators/solar-sizing" className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition font-semibold">
             Calculate Your System
           </Link>
-          <Link href="/guides/how-to-choose" className="ebay-btn-secondary">
+          <Link href="/guides/how-to-choose" className="border border-gray-300 text-gray-700 px-6 py-3 rounded-md hover:bg-gray-50 transition font-semibold">
             Read Buying Guide
           </Link>
         </div>

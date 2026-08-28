@@ -39,7 +39,7 @@ export default function Footer() {
               <li><Link href="/calculators/solar-sizing" className="hover:text-white">Sizing Calculator</Link></li>
               <li><Link href="/calculators/battery-runtime" className="hover:text-white">Runtime Calculator</Link></li>
               <li><Link href="/guides" className="hover:text-white">Buying Guides</Link></li>
-              <li><Link href="/guides/wiring-diagrams" className="hover:text-white">Wiring Diagrams</Link></li>
+              <li><Link href="/wiring-diagrams" className="hover:text-white">Wiring Diagrams</Link></li>
               <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
             </ul>
           </div>

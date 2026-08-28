@@ -24,6 +24,7 @@ const guideCategories = [
       { title: 'How to Choose a Solar Generator', href: '/guides/how-to-choose-solar-generator' },
       { title: 'How to Wire a Solar System', href: '/guides/how-to-wire-solar-system' },
       { title: 'How to Install Solar Panels', href: '/guides/how-to-install-solar-panels' },
+      { title: 'How to Many Solar Panels Do I Need?', href: '/guides/how-many-solar-panels-do-i-need' },
       { title: 'How to Calculate Battery Runtime', href: '/guides/calculate-battery-runtime' },
     ]
   },
@@ -44,7 +45,7 @@ const guideCategories = [
     icon: Shield,
     href: '/guides/emergency-preparedness',
     guides: [
-      { title: 'Emergency Power Planning', href: '/guides/emergency-power-planning' },
+      { title: 'Emergency Power Setup', href: '/guides/emergency-power-setup' },
       { title: 'Blackout Survival Guide', href: '/guides/blackout-survival-guide' },
       { title: 'Medical Device Power', href: '/guides/medical-device-power' },
     ]
@@ -55,7 +56,7 @@ const guideCategories = [
     icon: Caravan,
     href: '/guides/van-life',
     guides: [
-      { title: 'Van Life Solar Setup', href: '/guides/van-life-solar-setup' },
+      { title: 'Van Life Solar Sizing', href: '/guides/van-life-solar-sizing' },
       { title: 'RV Power Systems', href: '/guides/rv-power-systems' },
       { title: 'Camping Power Solutions', href: '/guides/camping-power-solutions' },
     ]
@@ -66,7 +67,7 @@ const guideCategories = [
     icon: Home,
     href: '/guides/off-grid-living',
     guides: [
-      { title: 'Complete Off-Grid Living Guide', href: '/guides/complete-off-grid-living' },
+      { title: 'Complete Off-Grid Living Guide', href: '/guides/complete-off-grid-living-guide' },
       { title: 'Home Backup Systems', href: '/guides/home-backup-systems' },
       { title: 'Whole Home Solar', href: '/guides/whole-home-solar' },
     ]
