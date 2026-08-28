@@ -12,6 +12,6 @@ export default function robots() {
         disallow: ['/api/', '/admin/'],
       },
     ],
-    sitemap: 'https://offgridpower.com/sitemap.xml',
+    sitemap: 'https://theloadcalc.com/sitemap.xml',
   }
 }

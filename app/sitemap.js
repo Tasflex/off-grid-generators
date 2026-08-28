@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const baseUrl = 'https://offgridpower.com'
+  const baseUrl = 'https://theloadcalc.com'
   
   const routes = [
     // Core Pages
