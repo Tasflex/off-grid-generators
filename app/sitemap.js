@@ -186,9 +186,10 @@ export default function sitemap() {
     
     // About Pages
     { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${baseUrl}/about/affiliate-disclosure`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
-    { url: `${baseUrl}/about/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
-    { url: `${baseUrl}/about/privacy-policy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
+    { url: `${baseUrl}/affiliate-disclosure`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
+    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
+    { url: `${baseUrl}/privacy-policy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
+    { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
     
     // Search
     { url: `${baseUrl}/search`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 }
