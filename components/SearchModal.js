@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Search, X, TrendingUp, FileText, Calculator, Box, Zap, Home, ArrowRight } from 'lucide-react'
+import { Search, X, TrendingUp, FileText, Calculator, Box, Zap, Home, ArrowRight, Layout, Compass, Info } from 'lucide-react'
 import { searchContent, popularSearches } from '../lib/search-data'
 
 export default function SearchModal({ isOpen, onClose }) {
@@ -22,7 +22,7 @@ export default function SearchModal({ isOpen, onClose }) {
   // Focus input when modal opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      inputRef.current.focus()
+      setTimeout(() => inputRef.current.focus(), 100)
     }
   }, [isOpen])
 
@@ -51,6 +51,26 @@ export default function SearchModal({ isOpen, onClose }) {
     saveSearch(term)
   }
 
+  // Handle form submission - navigate to search page
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      saveSearch(searchQuery.trim())
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`
+      onClose()
+    }
+  }
+
+  // Handle Enter key press
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      e.preventDefault()
+      saveSearch(searchQuery.trim())
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`
+      onClose()
+    }
+  }
+
   // Get icon for result type
   const getResultIcon = (type) => {
     switch (type) {
@@ -66,6 +86,10 @@ export default function SearchModal({ isOpen, onClose }) {
         return <Zap className="h-4 w-4 text-orange-600" />
       case 'comparison':
         return <TrendingUp className="h-4 w-4 text-red-600" />
+      case 'diagram':
+        return <Layout className="h-4 w-4 text-blue-600" />
+      case 'about':
+        return <Info className="h-4 w-4 text-gray-600" />
       default:
         return <ArrowRight className="h-4 w-4 text-gray-600" />
     }
@@ -84,29 +108,50 @@ export default function SearchModal({ isOpen, onClose }) {
     guide: 'Guides',
     blog: 'Blog Posts',
     category: 'Categories',
-    comparison: 'Comparisons'
+    comparison: 'Comparisons',
+    diagram: 'Wiring Diagrams',
+    about: 'About Us'
   }
 
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 p-4 pt-20">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
-        {/* Search Input */}
-        <div className="flex items-center p-4 border-b">
-          <Search className="h-5 w-5 text-gray-400 mr-3" />
+    <div 
+      className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 p-4 pt-20"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Search Input - Updated with form */}
+        <form onSubmit={handleSearchSubmit} className="flex items-center p-4 border-b">
+          <Search className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
           <input
             ref={inputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search products, calculators, guides, blogs..."
-            className="flex-1 outline-none text-lg"
+            onKeyDown={handleKeyDown}
+            placeholder="Search products, calculators, guides, wiring diagrams..."
+            className="flex-1 outline-none text-lg w-full"
           />
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="h-5 w-5" />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="text-gray-400 hover:text-gray-600 mr-2"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          )}
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium"
+          >
+            Search
           </button>
-        </div>
+        </form>
 
         {/* Search Results */}
         <div className="flex-1 overflow-y-auto p-4">
@@ -117,10 +162,10 @@ export default function SearchModal({ isOpen, onClose }) {
                 {Object.entries(groupedResults).map(([type, items]) => (
                   <div key={type}>
                     <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">
-                      {typeLabels[type] || type}
+                      {typeLabels[type] || type} ({items.length})
                     </h3>
                     <div className="space-y-1">
-                      {items.map((result, index) => (
+                      {items.slice(0, 5).map((result, index) => (
                         <Link
                           key={`${type}-${index}`}
                           href={result.url}
@@ -144,9 +189,23 @@ export default function SearchModal({ isOpen, onClose }) {
                           <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
                         </Link>
                       ))}
+                      {items.length > 5 && (
+                        <div className="text-xs text-gray-500 pl-3 pt-1">
+                          +{items.length - 5} more results
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
+
+                {/* View All Results Button */}
+                <Link
+                  href={`/search?q=${encodeURIComponent(searchQuery)}`}
+                  onClick={onClose}
+                  className="block text-center bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
+                >
+                  View All Results ({results.length})
+                </Link>
               </div>
             ) : (
               <div className="text-center py-12">
@@ -236,9 +295,20 @@ export default function SearchModal({ isOpen, onClose }) {
           <p className="text-xs text-gray-500">
             Press <kbd className="px-1 bg-gray-200 rounded">ESC</kbd> to close
           </p>
-          <p className="text-xs text-gray-500">
-            {results.length > 0 ? `${results.length} results found` : ''}
-          </p>
+          <div className="flex items-center space-x-4">
+            {searchQuery && results.length > 0 && (
+              <span className="text-xs text-gray-500">
+                {results.length} results found
+              </span>
+            )}
+            <Link
+              href="/search"
+              onClick={onClose}
+              className="text-xs text-blue-600 hover:underline"
+            >
+              Advanced Search →
+            </Link>
+          </div>
         </div>
       </div>
     </div>

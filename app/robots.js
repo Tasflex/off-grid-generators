@@ -2,14 +2,9 @@ export default function robots() {
   return {
     rules: [
       {
-        userAgent: '*',
+        userAgent: '*',        // All bots including Google
         allow: '/',
         disallow: ['/api/', '/_next/', '/admin/'],
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-        disallow: ['/api/', '/admin/'],
       },
     ],
     sitemap: 'https://theloadcalc.com/sitemap.xml',

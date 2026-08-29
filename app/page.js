@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard'
 import SearchModal from '../components/SearchModal'
 import { getProductsByCategory } from '../lib/products'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Calculator as CalculatorIcon, Zap, Battery, Sun, Search } from 'lucide-react'
 
 export default function HomePage() {
@@ -15,9 +16,22 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-16">
+      {/* Hero Section with Background Image */}
+      <section className="relative text-white">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-solar-bg.webp"
+            alt="Solar panels background"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Dark Overlay for readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/50"></div>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 py-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
               <div className="mb-4">
@@ -26,7 +40,7 @@ export default function HomePage() {
                 </span>
               </div>
               <h1 className="text-4xl font-bold mb-4">
-                Off-Grid Solar Sizing Calculator
+                Solar Generator Sizing Calculator
               </h1>
               <p className="text-lg mb-6 text-blue-100">
                 Calculate your exact battery and solar requirements for any emergency backup, van conversion, or off-grid setup. Get instant product recommendations with your precise needs.
@@ -53,9 +67,27 @@ export default function HomePage() {
                 </button>
               </div>
             </div>
+            
+            {/* Circle with Product Image */}
             <div className="hidden md:flex justify-center">
-              <div className="w-64 h-64 bg-white/20 rounded-full flex items-center justify-center">
-                <Zap className="w-32 h-32 text-yellow-300" />
+              <div className="relative w-72 h-72">
+                {/* Glowing circle effect */}
+                <div className="absolute inset-0 rounded-full bg-white/20 backdrop-blur-sm shadow-2xl"></div>
+                
+                {/* Product Image Inside Circle */}
+                <div className="absolute inset-4 rounded-full overflow-hidden border-4 border-white/30 shadow-xl">
+                  <Image
+                    src="/images/products/ecoflow-delta-pro.jpg"
+                    alt="EcoFlow Delta Pro Solar Generator"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                
+                {/* Floating Badge */}
+                <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                  ⚡ 3,600Wh
+                </div>
               </div>
             </div>
           </div>
@@ -220,7 +252,7 @@ export default function HomePage() {
             <p className="text-sm text-gray-600 mb-4">
               Learn how to calculate the right backup power for your home. Our step-by-step tutorial covers everything from refrigerator sizing to full-home backup systems.
             </p>
-            <Link href="/guides/emergency-preparedness" className="text-blue-600 hover:underline font-medium">
+            <Link href="/guides/emergency-power-setup" className="text-blue-600 hover:underline font-medium">
               Start Your Emergency Plan →
             </Link>
           </div>

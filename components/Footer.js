@@ -9,8 +9,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <h4 className="text-white font-semibold mb-3">OffGrid Power</h4>
-            <p className="text-sm">Helping you design the perfect off-grid energy system for your needs.</p>
+            <h4 className="text-white font-semibold mb-3">TheLoadCalc</h4>
+            <p className="text-sm">Calculate your perfect solar power system. Expert reviews, calculators, and guides.</p>
             <div className="flex space-x-4 mt-4">
               <a href="#" className="hover:text-white"><Facebook className="h-5 w-5" /></a>
               <a href="#" className="hover:text-white"><Twitter className="h-5 w-5" /></a>
@@ -59,7 +59,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-gray-800 mt-8 pt-6 text-center">
-          <p className="text-sm">&copy; 2026 OffGrid Power. All rights reserved.</p>
+          <p className="text-sm">&copy; 2026 TheLoadCalc. All rights reserved.</p>
           <p className="text-xs mt-2">As an affiliate partner, we may earn commissions from qualifying purchases.</p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image' 
 import { useState } from 'react'
 import { Search, Menu, X, ChevronDown } from 'lucide-react'
 import SearchModal from './SearchModal'
@@ -55,16 +56,19 @@ export default function Header() {
         {/* Main header */}
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between py-4">
-            {/* Logo */}
+            {/* Logo - Using the SVG file */}
             <Link href="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
+              <Image
+                src="/images/logo (1).png"
+                alt="TheLoadCalc Logo"
+                width={100}
+                height={100}
+                className="w-100 h-100"
+              />
               <div>
-                <span className="text-xl font-bold text-gray-900">OffGrid</span>
-                <span className="text-xl font-bold text-blue-600">Power</span>
+                <span className="text-xl font-bold text-gray-900">The</span>
+                <span className="text-xl font-bold text-blue-600">Load</span>
+                <span className="text-xl font-bold text-gray-900">Calc</span>
               </div>
             </Link>
 
@@ -98,6 +102,17 @@ export default function Header() {
             {/* Mobile menu button */}
             <button className="md:hidden p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+
+          {/* Mobile Search Bar - NEW */}
+          <div className="md:hidden pb-3">
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="w-full flex items-center px-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 hover:border-blue-500 transition"
+            >
+              <Search className="h-5 w-5 text-gray-400 mr-2" />
+              <span className="text-gray-500 text-sm">Search products, calculators, guides...</span>
             </button>
           </div>
 
