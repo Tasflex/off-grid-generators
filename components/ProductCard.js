@@ -137,11 +137,6 @@ export default function ProductCard({ product }) {
             View Deal
           </button>
         </div>
-
-        {/* Affiliate Disclosure */}
-        <div className="mt-2 text-xs text-gray-400 text-center">
-          <span>We earn a commission if you make a purchase, at no additional cost to you.</span>
-        </div>
       </div>
     </div>
   )
