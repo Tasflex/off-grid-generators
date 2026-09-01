@@ -43,13 +43,6 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-Q3RR3WQL0R');
           `}
         </Script>
-
-
-{/* AvantLink Verification Script - Place in head */}
-        <Script
-          src="http://classic.avantlink.com/affiliate_app_confirm.php?mode=js&authResponse=148880a3354dc12096dbd27c86af507790fd8d27"
-          strategy="afterInteractive"
-        />
         
         <Header />
         <main className="flex-grow">
