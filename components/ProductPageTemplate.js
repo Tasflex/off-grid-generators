@@ -22,9 +22,53 @@ export default function ProductPageTemplate({ product }) {
     { id: 'compare', label: 'Compare' }
   ]
 
-  const handleAffiliateClick = () => {
+  const handleAffiliateClick = async () => {
+    // 1. Track in Supabase
+    try {
+      const response = await fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'affiliate_click',
+          product_id: product.id,
+          product_name: product.name,
+          brand: product.brand,
+          affiliate_url: product.affiliateUrl,
+          page_path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        })
+      })
+      
+      if (!response.ok) {
+        console.error('Tracking failed:', response.status, await response.text())
+      } else {
+        console.log('✅ Affiliate click tracked successfully (Product Page)')
+      }
+    } catch (error) {
+      console.error('Tracking error:', error)
+    }
+    
+    // 2. Track in Google Analytics
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'affiliate_click', {
+        product_id: product.id,
+        product_name: product.name,
+        brand: product.brand,
+        page_path: window.location.pathname
+      })
+    }
+    
+    // 3. Show toast
     toast.success('Redirecting to best price...')
-    window.open(product.affiliateUrl, '_blank')
+    
+    // 4. Open link with rel="sponsored"
+    const link = document.createElement('a')
+    link.href = product.affiliateUrl
+    link.target = '_blank'
+    link.rel = 'sponsored noopener noreferrer'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   // Calculate runtime estimates for common devices

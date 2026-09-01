@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Toaster } from 'react-hot-toast'
 import Script from 'next/script'
+import AnalyticsTracker from '../components/AnalyticsTracker'
 
 export const metadata = {
   metadataBase: new URL('https://theloadcalc.com'),
@@ -40,9 +41,15 @@ export default function RootLayout({ children }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-Q3RR3WQL0R');
+            gtag('config', 'G-Q3RR3WQL0R', {
+              page_path: window.location.pathname,
+              send_page_view: true
+            });
           `}
         </Script>
+        
+        {/* Analytics Tracker - Client Component */}
+        <AnalyticsTracker />
         
         <Header />
         <main className="flex-grow">

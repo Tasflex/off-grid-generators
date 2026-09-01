@@ -1,19 +1,54 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
-import { Star, Battery, Zap, ArrowRight, ExternalLink, ShoppingCart } from 'lucide-react'
+import { Star, Battery, Zap, ShoppingCart } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 export default function ProductCard({ product }) {
-  const [hovered, setHovered] = useState(false)
-
-  const handleAffiliateClick = (e) => {
+  const handleAffiliateClick = async (e) => {
     e.preventDefault()
     e.stopPropagation()
-    // Track affiliate click
+    
+    // 1. Track in Supabase directly (no external function needed)
+    try {
+      const response = await fetch('/api/analytics', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'affiliate_click',
+          product_id: product.id,
+          product_name: product.name,
+          brand: product.brand,
+          affiliate_url: product.affiliateUrl,
+          page_path: window.location.pathname,
+          timestamp: new Date().toISOString()
+        })
+      })
+      
+      if (!response.ok) {
+        console.error('Tracking failed:', response.status, await response.text())
+      } else {
+        console.log('✅ Affiliate click tracked successfully')
+      }
+    } catch (error) {
+      console.error('Tracking error:', error)
+    }
+    
+    // 2. Track in Google Analytics
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'affiliate_click', {
+        product_id: product.id,
+        product_name: product.name,
+        brand: product.brand,
+        page_path: window.location.pathname
+      })
+    }
+    
+    // 3. Show toast
     toast.success('Redirecting to best price...')
-    window.open(product.affiliateUrl, '_blank')
+    
+    // 4. Open link with rel="sponsored"
+    window.open(product.affiliateUrl, '_blank', 'noopener,noreferrer')
   }
 
   return (
@@ -30,7 +65,6 @@ export default function ProductCard({ product }) {
               e.target.parentElement.innerHTML = '<div class="text-6xl">⚡</div>'
             }}
           />
-          {/* Badges */}
           <span className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
             {product.brand}
           </span>
@@ -44,7 +78,6 @@ export default function ProductCard({ product }) {
 
       {/* Product Info */}
       <div className="p-4">
-        {/* Title - Links to internal page */}
         <Link href={`/products/${product.id}`}>
           <h3 className="font-semibold text-gray-900 mb-1 line-clamp-2 hover:text-blue-600 transition">
             {product.name}
@@ -89,7 +122,6 @@ export default function ProductCard({ product }) {
 
         {/* Buttons */}
         <div className="flex gap-2 mt-3">
-          {/* View Details - Internal link */}
           <Link
             href={`/products/${product.id}`}
             className="flex-1 bg-blue-600 text-white py-2 rounded font-medium hover:bg-blue-700 transition text-center text-sm flex items-center justify-center"
@@ -97,7 +129,6 @@ export default function ProductCard({ product }) {
             View Details
           </Link>
           
-          {/* View Deal - Affiliate link */}
           <button
             onClick={handleAffiliateClick}
             className="flex-1 bg-green-600 text-white py-2 rounded font-medium hover:bg-green-700 transition text-sm flex items-center justify-center"
@@ -105,6 +136,11 @@ export default function ProductCard({ product }) {
             <ShoppingCart className="h-4 w-4 mr-1" />
             View Deal
           </button>
+        </div>
+
+        {/* Affiliate Disclosure */}
+        <div className="mt-2 text-xs text-gray-400 text-center">
+          <span>We earn a commission if you make a purchase, at no additional cost to you.</span>
         </div>
       </div>
     </div>
