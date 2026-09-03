@@ -1,13 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Users, Eye, MousePointerClick, DollarSign, TrendingUp, TrendingDown, BarChart3, Calendar, Download, RefreshCw, ExternalLink, ShoppingCart } from 'lucide-react'
+import { Users, Eye, MousePointerClick, DollarSign, TrendingUp, TrendingDown, BarChart3, Calendar, Download, RefreshCw, ExternalLink, ShoppingCart, AlertCircle, LogOut } from 'lucide-react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts'
 
 export default function AnalyticsDashboard() {
-  const [timeRange, setTimeRange] = useState('30d')
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
+  const [authError, setAuthError] = useState(null)
+  const [timeRange, setTimeRange] = useState('30d')
   const [analytics, setAnalytics] = useState({
     totalVisitors: 0,
     totalPageviews: 0,
@@ -27,9 +30,44 @@ export default function AnalyticsDashboard() {
   const [affiliateClicksData, setAffiliateClicksData] = useState([])
   const [error, setError] = useState(null)
 
+  // Check authentication on load
   useEffect(() => {
-    fetchAnalyticsData()
-  }, [timeRange])
+    const checkAuth = async () => {
+      try {
+        // First check if cookie exists
+        const cookies = document.cookie.split(';')
+        const adminCookie = cookies.find(c => c.trim().startsWith('admin_authenticated='))
+        
+        if (!adminCookie || adminCookie.split('=')[1] !== 'true') {
+          setAuthError('Session expired. Please login again.')
+          setIsLoading(false)
+          return
+        }
+
+        // Try to fetch data to verify authentication
+        const response = await fetch('/api/analytics?range=30d&type=all', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        
+        if (response.status === 401) {
+          setAuthError('Session expired or invalid. Please login again.')
+          setIsLoading(false)
+          return
+        }
+
+        // If we get here, user is authenticated
+        setIsLoading(false)
+        fetchAnalyticsData()
+      } catch (error) {
+        console.error('Auth check error:', error)
+        setAuthError('Failed to connect to server. Please try again.')
+        setIsLoading(false)
+      }
+    }
+    
+    checkAuth()
+  }, [])
 
   const fetchAnalyticsData = async () => {
     setIsLoading(true)
@@ -41,6 +79,12 @@ export default function AnalyticsDashboard() {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       })
+
+      if (response.status === 401) {
+        setAuthError('Session expired. Please login again.')
+        setIsLoading(false)
+        return
+      }
 
       if (!response.ok) {
         throw new Error(`Failed to fetch analytics: ${response.status}`)
@@ -145,7 +189,47 @@ export default function AnalyticsDashboard() {
     ])
   }
 
+  const handleLogout = () => {
+    document.cookie = 'admin_authenticated=; path=/; max-age=0'
+    window.location.href = '/admin/login'
+  }
+
   const COLORS = ['#3665f3', '#f5a623', '#48bb78', '#ed8936', '#9f7aea', '#f56565']
+
+  // Show error state if authentication failed
+  if (authError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="h-8 w-8 text-red-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Authentication Error</h2>
+          <p className="text-gray-600 mb-6">{authError}</p>
+          <div className="space-y-3">
+            <button
+              onClick={handleLogout}
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition flex items-center justify-center"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Go to Login
+            </button>
+            <button
+              onClick={() => {
+                setAuthError(null)
+                setIsLoading(true)
+                window.location.reload()
+              }}
+              className="w-full bg-gray-100 text-gray-700 py-2 rounded-md hover:bg-gray-200 transition flex items-center justify-center"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (
@@ -160,7 +244,7 @@ export default function AnalyticsDashboard() {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto py-8">
+      <div className="max-w-7xl mx-auto py-8 px-4">
         <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
           <div className="text-4xl mb-4">⚠️</div>
           <h2 className="text-xl font-bold text-red-800 mb-2">Unable to Load Analytics</h2>
@@ -177,27 +261,29 @@ export default function AnalyticsDashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-8">
+    <div className="max-w-7xl mx-auto py-8 px-4">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
           <p className="text-gray-600 mt-1">Track your site performance and affiliate revenue</p>
         </div>
-        <div className="flex space-x-2">
-          {['7d', '30d', '90d'].map(range => (
-            <button
-              key={range}
-              onClick={() => setTimeRange(range)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                timeRange === range
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
-            </button>
-          ))}
+        <div className="flex items-center space-x-2">
+          <div className="flex space-x-2">
+            {['7d', '30d', '90d'].map(range => (
+              <button
+                key={range}
+                onClick={() => setTimeRange(range)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                  timeRange === range
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {range === '7d' ? '7 Days' : range === '30d' ? '30 Days' : '90 Days'}
+              </button>
+            ))}
+          </div>
           <button
             onClick={fetchAnalyticsData}
             className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -205,12 +291,19 @@ export default function AnalyticsDashboard() {
           >
             <RefreshCw className="h-4 w-4" />
           </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition flex items-center"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </button>
         </div>
       </div>
 
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        <div className="ebay-card p-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500">Visitors</div>
             <Users className="h-4 w-4 text-blue-600" />
@@ -224,7 +317,7 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="ebay-card p-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500">Pageviews</div>
             <Eye className="h-4 w-4 text-green-600" />
@@ -238,7 +331,7 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="ebay-card p-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500">Affiliate Clicks</div>
             <MousePointerClick className="h-4 w-4 text-yellow-600" />
@@ -252,7 +345,7 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="ebay-card p-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500">Revenue</div>
             <DollarSign className="h-4 w-4 text-green-600" />
@@ -266,7 +359,7 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="ebay-card p-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500">Conversion Rate</div>
             <BarChart3 className="h-4 w-4 text-purple-600" />
@@ -280,7 +373,7 @@ export default function AnalyticsDashboard() {
           </div>
         </div>
 
-        <div className="ebay-card p-4">
+        <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="flex items-center justify-between mb-2">
             <div className="text-xs text-gray-500">Avg. Session</div>
             <Calendar className="h-4 w-4 text-red-600" />
@@ -295,8 +388,9 @@ export default function AnalyticsDashboard() {
         </div>
       </div>
 
-      {/* Affiliate Clicks Section - NEW */}
-      <div className="ebay-card p-6 mb-8">
+      {/* Rest of your existing JSX remains the same... */}
+      {/* Affiliate Clicks Section */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold text-gray-900 flex items-center">
             <ShoppingCart className="h-5 w-5 text-yellow-600 mr-2" />
@@ -339,7 +433,7 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* Traffic Chart */}
-      <div className="ebay-card p-6 mb-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Traffic Overview</h2>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
@@ -359,7 +453,7 @@ export default function AnalyticsDashboard() {
       {/* Top Pages & Top Products */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Top Pages */}
-        <div className="ebay-card p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-gray-900">Top Pages</h2>
             <Link href="/sitemap.xml" className="text-blue-600 hover:underline text-sm" target="_blank">
@@ -393,7 +487,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* Top Products */}
-        <div className="ebay-card p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold text-gray-900">Top Products by Clicks</h2>
             <Link href="/admin/social-scheduler" className="text-blue-600 hover:underline text-sm">
@@ -431,7 +525,7 @@ export default function AnalyticsDashboard() {
       {/* Revenue & Devices */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Revenue by Category */}
-        <div className="ebay-card p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Revenue by Category</h2>
           <div className="h-64">
             {revenueData.length > 0 ? (
@@ -453,7 +547,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* Device Breakdown */}
-        <div className="ebay-card p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Device Breakdown</h2>
           <div className="h-64">
             {deviceData.length > 0 ? (
@@ -487,7 +581,7 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* Traffic Sources */}
-      <div className="ebay-card p-6 mb-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Traffic Sources</h2>
         {topSources.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -511,15 +605,15 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* Export Button */}
-      <div className="ebay-card p-6 text-center bg-gradient-to-r from-blue-50 to-yellow-50">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 text-center bg-gradient-to-r from-blue-50 to-yellow-50">
         <h2 className="text-lg font-bold text-gray-900 mb-2">Export Your Data</h2>
         <p className="text-gray-600 mb-4">Download your analytics for custom reporting.</p>
         <div className="flex justify-center space-x-4">
-          <button className="ebay-btn-primary">
+          <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
             <Download className="h-4 w-4 inline mr-2" />
             Export CSV
           </button>
-          <button className="ebay-btn-secondary">
+          <button className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition">
             <Download className="h-4 w-4 inline mr-2" />
             Export PDF
           </button>
