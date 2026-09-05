@@ -12,9 +12,6 @@ export const metadata = {
     template: '%s | TheLoadCalc'
   },
   description: 'Calculate your exact solar and battery needs. Get personalized recommendations for off-grid power systems.',
-  verification: {
-    pinterest: 'caf40505f26c9592b2200611ab990c8f'
-  },
   openGraph: {
     title: 'TheLoadCalc - Solar Generator Sizing & Calculator',
     description: 'Use our interactive calculator to find the perfect solar generator for your needs.',
@@ -27,6 +24,11 @@ export const metadata = {
       { url: '/favicon.ico' },
       { url: '/images/logo.png', type: 'image/png' }
     ]
+  },
+  verification: {
+    other: {
+      'p:domain_verify': 'caf40505f26c9592b2200611ab990c8f'
+    }
   }
 }
 
