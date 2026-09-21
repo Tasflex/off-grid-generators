@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Facebook, Instagram, Twitter, Youtube } from 'lucide-react'
+import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube, FaPinterestP } from 'react-icons/fa6'
 
 
 export default function Footer() {
@@ -12,11 +12,21 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-3">TheLoadCalc</h4>
             <p className="text-sm">Calculate your perfect solar power system. Expert reviews, calculators, and guides.</p>
             <div className="flex space-x-4 mt-4">
-              <a href="#" className="hover:text-white"><Facebook className="h-5 w-5" /></a>
-              <a href="#" className="hover:text-white"><Twitter className="h-5 w-5" /></a>
-              <a href="#" className="hover:text-white"><Instagram className="h-5 w-5" /></a>
-              <a href="#" className="hover:text-white"><Youtube className="h-5 w-5" /></a>
-             
+              <a href="https://web.facebook.com/profile.php?id=61594146959041" className="hover:text-white" aria-label="Facebook">
+                <FaFacebookF className="h-5 w-5" />
+              </a>
+              <a href="#" className="hover:text-white" aria-label="X (Twitter)">
+                <FaXTwitter className="h-5 w-5" />
+              </a>
+              <a href="https://www.instagram.com/loadcalc/" className="hover:text-white" aria-label="Instagram">
+                <FaInstagram className="h-5 w-5" />
+              </a>
+              <a href="https://www.pinterest.com/theloadcac/" className="hover:text-white" aria-label="Pinterest">
+                <FaPinterestP className="h-5 w-5" />
+              </a>
+              <a href="#" className="hover:text-white" aria-label="YouTube">
+                <FaYoutube className="h-5 w-5" />
+              </a>
             </div>
           </div>
 

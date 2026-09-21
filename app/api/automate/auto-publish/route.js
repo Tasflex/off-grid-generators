@@ -9,6 +9,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
+// Base URL for building destination links
+const SITE_BASE_URL = 'https://theloadcalc.com'
+
 // Helper to check authentication using cookies
 function checkAuth() {
   const cookieStore = cookies()
@@ -145,6 +148,9 @@ export async function POST(request) {
           }
         }
         
+        // Build the full destination URL from the content slug
+        const destinationLink = `${SITE_BASE_URL}${content.slug}`
+        
         const result = await publishToZernio({
           content: platformContentMap[platform] || content.summary,
           images: images,
@@ -152,6 +158,7 @@ export async function POST(request) {
           copyId: account.copy_id,
           boardId: account.board_id,
           scheduledFor: null,
+          destinationLink: destinationLink, // <-- Pass the link for Pinterest
           platformSpecificContent: {
             [platform]: platformContentMap[platform] || content.summary
           }

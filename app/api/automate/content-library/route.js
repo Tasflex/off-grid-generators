@@ -294,6 +294,132 @@ const contentLibrary = [
     slug: '/wiring-diagrams/battery-bank',
     summary: 'How to wire your battery bank in series or parallel.',
     image: '/images/wiring/battery-bank.jpg'
+  },
+
+  // Calculators — Sizing & Planning
+  {
+    id: 'calc-solar-sizing',
+    type: 'calculator',
+    title: 'Solar Sizing Calculator: Find Your Perfect System',
+    slug: '/calculators/solar-sizing',
+    summary: 'Use our free solar sizing calculator to match your appliances and usage to the right solar generator.',
+    image: '/images/calculators/solar-sizing.jpg'
+  },
+  {
+    id: 'calc-battery-runtime',
+    type: 'calculator',
+    title: 'Battery Runtime Calculator: Hours of Power',
+    slug: '/calculators/battery-runtime',
+    summary: 'Calculate exactly how long any battery will run your devices before it needs recharging.',
+    image: '/images/calculators/battery-runtime.jpg'
+  },
+  {
+    id: 'calc-off-grid-budget',
+    type: 'calculator',
+    title: 'Off-Grid Budget Calculator: Real Cost Estimates',
+    slug: '/calculators/off-grid-budget',
+    summary: 'Estimate the total cost of an off-grid solar system based on your daily energy needs and backup days.',
+    image: '/images/calculators/off-grid-budget.jpg'
+  },
+  {
+    id: 'calc-inverter-sizing',
+    type: 'calculator',
+    title: 'Inverter Sizing Calculator: Running & Surge Watts',
+    slug: '/calculators/inverter-sizing',
+    summary: 'Find the right inverter size for your appliances with running and surge watt calculations.',
+    image: '/images/calculators/inverter-sizing.jpg'
+  },
+  {
+    id: 'calc-charge-controller-sizing',
+    type: 'calculator',
+    title: 'Charge Controller Sizing Calculator',
+    slug: '/calculators/charge-controller-sizing',
+    summary: 'Calculate the right MPPT or PWM charge controller for your solar array and battery bank.',
+    image: '/images/calculators/charge-controller-sizing.jpg'
+  },
+  {
+    id: 'calc-solar-panel-layout',
+    type: 'calculator',
+    title: 'Solar Panel Layout Calculator: Panels & Roof Fit',
+    slug: '/calculators/solar-panel-layout',
+    summary: 'Calculate how many solar panels you need and whether they will fit on your roof.',
+    image: '/images/calculators/solar-panel-layout.jpg'
+  },
+  {
+    id: 'calc-charge-time',
+    type: 'calculator',
+    title: 'Charge Time Calculator: Solar, AC, or Car',
+    slug: '/calculators/charge-time',
+    summary: 'Calculate how long it takes to charge your generator with solar panels, AC, or car charging.',
+    image: '/images/calculators/charge-time.jpg'
+  },
+
+  // Calculators — Performance & Loss Analysis
+  {
+    id: 'calc-panel-degradation',
+    type: 'calculator',
+    title: 'Panel Degradation Calculator: Year-by-Year Loss',
+    slug: '/calculators/panel-degradation',
+    summary: 'Project how much power your solar panels lose each year and what they will produce in the future.',
+    image: '/images/calculators/panel-degradation.jpg'
+  },
+  {
+    id: 'calc-temperature-coefficient-loss',
+    type: 'calculator',
+    title: 'Temperature Coefficient Loss Calculator',
+    slug: '/calculators/temperature-coefficient-loss',
+    summary: 'See how much solar output you lose to heat and how much a premium panel would recover.',
+    image: '/images/calculators/temperature-coefficient-loss.jpg'
+  },
+  {
+    id: 'calc-shading-impact',
+    type: 'calculator',
+    title: 'Shading Impact Calculator: Real Output Loss',
+    slug: '/calculators/shading-impact',
+    summary: 'See how partial shading affects output — and how series, parallel, or optimizers change the outcome.',
+    image: '/images/calculators/shading-impact.jpg'
+  },
+  {
+    id: 'calc-dust-soiling-loss',
+    type: 'calculator',
+    title: 'Dust & Soiling Loss Estimator',
+    slug: '/calculators/dust-soiling-loss',
+    summary: 'Estimate energy lost to dust, pollen, and buildup — with cleaning frequency recommendations.',
+    image: '/images/calculators/dust-soiling-loss.jpg'
+  },
+  {
+    id: 'calc-panel-hotspot-risk',
+    type: 'calculator',
+    title: 'Solar Panel Hotspot Risk Calculator',
+    slug: '/calculators/panel-hotspot-risk',
+    summary: 'Assess the risk of hotspots forming in your solar array — a potential fire hazard.',
+    image: '/images/calculators/panel-hotspot-risk.jpg'
+  },
+
+  // Calculators — Battery & Component Economics
+  {
+    id: 'calc-battery-lifetime-cost',
+    type: 'calculator',
+    title: 'Battery Lifetime Cost Calculator: $/kWh Over Time',
+    slug: '/calculators/battery-lifetime-cost',
+    summary: 'Calculate the true cost per kilowatt-hour delivered over a battery\'s full lifespan and compare to grid power.',
+    image: '/images/calculators/battery-lifetime-cost.jpg'
+  },
+  {
+    id: 'calc-battery-dod-degradation',
+    type: 'calculator',
+    title: 'Battery DoD Degradation Calculator',
+    slug: '/calculators/battery-dod-degradation',
+    summary: 'See how depth of discharge affects battery cycle life and cost per kWh across chemistries.',
+    image: '/images/calculators/battery-dod-degradation.jpg'
+  },
+  {
+    id: 'calc-inverter-replacement',
+    type: 'calculator',
+    title: 'Inverter Replacement Interval Calculator',
+    slug: '/calculators/inverter-replacement',
+    summary: 'Estimate your inverter\'s expected lifespan and 25-year cost of ownership based on load and environment.',
+    image: '/images/calculators/inverter-replacement.jpg'
   }
 ]
 

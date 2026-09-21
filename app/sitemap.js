@@ -116,14 +116,28 @@ export default function sitemap() {
     { url: `${baseUrl}/products/ecoworthy-100ah`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     
     // Calculators
-    { url: `${baseUrl}/calculators`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${baseUrl}/calculators/solar-sizing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${baseUrl}/calculators/battery-runtime`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${baseUrl}/calculators/off-grid-budget`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${baseUrl}/calculators/solar-panel-layout`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${baseUrl}/calculators/charge-time`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${baseUrl}/calculators/inverter-sizing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/calculators/charge-controller-sizing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+{ url: `${baseUrl}/calculators`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+
+// Sizing & Planning (highest priority — evergreen, high traffic)
+{ url: `${baseUrl}/calculators/solar-sizing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+{ url: `${baseUrl}/calculators/battery-runtime`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+{ url: `${baseUrl}/calculators/off-grid-budget`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+{ url: `${baseUrl}/calculators/solar-panel-layout`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+{ url: `${baseUrl}/calculators/charge-time`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+{ url: `${baseUrl}/calculators/inverter-sizing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+{ url: `${baseUrl}/calculators/charge-controller-sizing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+
+// Performance & Loss Analysis (high priority — technical audience)
+{ url: `${baseUrl}/calculators/panel-degradation`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+{ url: `${baseUrl}/calculators/temperature-coefficient-loss`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+{ url: `${baseUrl}/calculators/shading-impact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+{ url: `${baseUrl}/calculators/dust-soiling-loss`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+{ url: `${baseUrl}/calculators/panel-hotspot-risk`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+
+// Battery & Component Economics (slightly lower — long-tail search)
+{ url: `${baseUrl}/calculators/battery-lifetime-cost`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+{ url: `${baseUrl}/calculators/battery-dod-degradation`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+{ url: `${baseUrl}/calculators/inverter-replacement`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     
     // Guides
     { url: `${baseUrl}/guides`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
