@@ -27,7 +27,7 @@ export const metadata = {
   },
   verification: {
     other: {
-      'p:domain_verify': 'caf40505f26c9592b2200611ab990c8f'
+      'p:domain_verify': '3468fd036b13bb553ff6de998467feb1'
     }
   }
 }
