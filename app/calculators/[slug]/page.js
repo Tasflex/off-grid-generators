@@ -81,7 +81,7 @@ export default function DeviceCalculatorPage({ params }) {
 
         <header className="max-w-3xl mb-8">
           <div className="flex items-center gap-2 mb-3">
-            <span className="px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide bg-gray-900 text-white">
+            <span className="px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide text-white" style={{ background: category.accent }}>
               {calc.code}
             </span>
             <span className="text-sm font-medium text-gray-600">{category.name}</span>
@@ -96,7 +96,7 @@ export default function DeviceCalculatorPage({ params }) {
           <article className="lg:col-span-2 space-y-10">
             <section>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">How the {calc.name.replace(/ Calculator.*$/, '').toLowerCase()} calculation works</h2>
-              <div className="rounded-xl bg-gray-900 text-gray-100 p-5 mb-5 font-mono text-sm leading-relaxed overflow-x-auto">
+              <div className="rounded-xl bg-blue-50 border border-blue-100 text-gray-800 p-5 mb-5 font-mono text-sm leading-relaxed overflow-x-auto">
                 {calc.formula.map(line => <div key={line}>{line}</div>)}
               </div>
               <ul className="space-y-3">
@@ -163,7 +163,7 @@ export default function DeviceCalculatorPage({ params }) {
               </div>
             )}
 
-            <Link href="/calculators" className="flex items-center justify-between rounded-2xl bg-gray-900 text-white p-5 hover:bg-gray-800">
+            <Link href="/calculators" className="flex items-center justify-between rounded-2xl bg-blue-600 text-white p-5 hover:bg-blue-700">
               <span className="font-semibold">All solar calculators</span>
               <ArrowRight className="h-5 w-5" />
             </Link>

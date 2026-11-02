@@ -1,166 +1,10 @@
 import Link from 'next/link'
-import { Calculator, Battery, Wallet, Sun, Timer, Grid, Zap, Cpu, ArrowRight, TrendingDown, Flame, Cloud, Thermometer, DollarSign, Calendar, Wind } from 'lucide-react'
+import { Calculator, Sun, Zap, ArrowRight } from 'lucide-react'
 import { deviceCalculators, deviceCalculatorsByCategory } from '../../lib/calc'
 
-const calculatorGroups = [
-  {
-    title: 'Sizing & Planning',
-    description: 'Start here — figure out what size system you need and how much it will cost.',
-    calculators: [
-      {
-        title: 'Solar Sizing Calculator',
-        description: 'Find the perfect solar generator for your specific appliances and usage patterns.',
-        icon: Calculator,
-        href: '/calculators/solar-sizing',
-        color: 'bg-blue-100 text-blue-600',
-        popular: true,
-        features: ['12+ appliances', 'Quick scenarios', 'Product recommendations']
-      },
-      {
-        title: 'Battery Runtime Calculator',
-        description: 'Calculate how long any battery will run your devices before needing a recharge.',
-        icon: Battery,
-        href: '/calculators/battery-runtime',
-        color: 'bg-green-100 text-green-600',
-        popular: true,
-        features: ['Popular batteries', 'Popular devices', 'Matching products']
-      },
-      {
-        title: 'Off-Grid Budget Calculator',
-        description: 'Estimate the total cost of your off-grid solar system based on your energy needs.',
-        icon: Wallet,
-        href: '/calculators/off-grid-budget',
-        color: 'bg-yellow-100 text-yellow-600',
-        popular: true,
-        features: ['Cost breakdown', 'Monthly savings', 'Phased purchase']
-      },
-      {
-        title: 'Inverter Sizing Calculator',
-        description: 'Find the right inverter size for your appliances based on running and surge watts.',
-        icon: Zap,
-        href: '/calculators/inverter-sizing',
-        color: 'bg-red-100 text-red-600',
-        popular: true,
-        features: ['Running watts', 'Surge watts', 'Product recommendations']
-      },
-      {
-        title: 'Charge Controller Sizing',
-        description: 'Calculate the right charge controller for your solar array and battery bank.',
-        icon: Cpu,
-        href: '/calculators/charge-controller-sizing',
-        color: 'bg-purple-100 text-purple-600',
-        popular: false,
-        features: ['MPPT/PWM', 'Battery types', 'System sizing']
-      },
-      {
-        title: 'Solar Panel Layout Calculator',
-        description: 'Calculate how many solar panels you need and plan your panel placement.',
-        icon: Grid,
-        href: '/calculators/solar-panel-layout',
-        color: 'bg-orange-100 text-orange-600',
-        popular: false,
-        features: ['Panel count', 'Roof fit check', 'System size']
-      },
-      {
-        title: 'Charge Time Calculator',
-        description: 'Calculate how long it takes to charge your generator with solar, AC, or car charging.',
-        icon: Timer,
-        href: '/calculators/charge-time',
-        color: 'bg-indigo-100 text-indigo-600',
-        popular: false,
-        features: ['3 charge methods', 'Efficiency factors', 'Quick estimates']
-      }
-    ]
-  },
-  {
-    title: 'Performance & Loss Analysis',
-    description: 'Diagnose real-world performance losses — degradation, shading, heat, and soiling.',
-    calculators: [
-      {
-        title: 'Panel Degradation Calculator',
-        description: 'Project how much power your panels lose each year and what they\'ll produce in the future.',
-        icon: TrendingDown,
-        href: '/calculators/panel-degradation',
-        color: 'bg-red-100 text-red-600',
-        popular: false,
-        features: ['Year-by-year projection', 'Loss over time', 'Premium vs budget']
-      },
-      {
-        title: 'Temperature Coefficient Loss',
-        description: 'See how much power you lose to heat and how much a premium panel would recover.',
-        icon: Thermometer,
-        href: '/calculators/temperature-coefficient-loss',
-        color: 'bg-orange-100 text-orange-600',
-        popular: false,
-        features: ['Cell temp impact', 'Panel comparison', 'Annual loss estimate']
-      },
-      {
-        title: 'Shading Impact Calculator',
-        description: 'See how partial shading affects output — and how wiring config changes the outcome.',
-        icon: Cloud,
-        href: '/calculators/shading-impact',
-        color: 'bg-indigo-100 text-indigo-600',
-        popular: false,
-        features: ['% coverage impact', 'Series vs parallel', 'Optimizer recovery']
-      },
-      {
-        title: 'Dust & Soiling Loss Estimator',
-        description: 'Estimate energy losses from dust and pollen, with cleaning frequency recommendations.',
-        icon: Wind,
-        href: '/calculators/dust-soiling-loss',
-        color: 'bg-yellow-100 text-yellow-600',
-        popular: false,
-        features: ['Location-based', 'Rainfall factor', 'Cleaning schedule']
-      },
-      {
-        title: 'Solar Panel Hotspot Risk',
-        description: 'Assess the risk of hotspots forming in your array — a potential fire hazard.',
-        icon: Flame,
-        href: '/calculators/panel-hotspot-risk',
-        color: 'bg-red-100 text-red-600',
-        popular: false,
-        features: ['Risk scoring', 'Bypass diode check', 'Safety recommendations']
-      }
-    ]
-  },
-  {
-    title: 'Battery & Component Economics',
-    description: 'Calculate lifetime cost of ownership — batteries, inverters, and long-term economics.',
-    calculators: [
-      {
-        title: 'Battery Lifetime Cost per kWh',
-        description: 'Calculate the true cost per kilowatt-hour delivered over a battery\'s full lifespan.',
-        icon: DollarSign,
-        href: '/calculators/battery-lifetime-cost',
-        color: 'bg-green-100 text-green-600',
-        popular: false,
-        features: ['$ per kWh', 'Grid comparison', '25-year projection']
-      },
-      {
-        title: 'Battery DoD Degradation',
-        description: 'See how depth of discharge affects battery lifespan and cost per kWh delivered.',
-        icon: Battery,
-        href: '/calculators/battery-dod-degradation',
-        color: 'bg-blue-100 text-blue-600',
-        popular: false,
-        features: ['DoD stress factor', 'Cycle life impact', 'Chemistry comparison']
-      },
-      {
-        title: 'Inverter Replacement Interval',
-        description: 'Estimate inverter lifespan and total 25-year cost of ownership based on load and environment.',
-        icon: Calendar,
-        href: '/calculators/inverter-replacement',
-        color: 'bg-purple-100 text-purple-600',
-        popular: false,
-        features: ['Expected lifespan', 'Environment factor', '25-year cost']
-      }
-    ]
-  }
-]
+const popular = new Set(['solar-sizing', 'battery-runtime', 'off-grid-budget', 'inverter-sizing', 'off-grid-system-sizing'])
 
 export default function CalculatorsPage() {
-  const totalCalculators = calculatorGroups.reduce((sum, g) => sum + g.calculators.length, 0) + deviceCalculators.length
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumb */}
@@ -174,107 +18,59 @@ export default function CalculatorsPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-3">Free Solar, Battery & Inverter Calculators</h1>
         <p className="text-gray-600">
-          {totalCalculators} interactive tools to help you plan, size, diagnose, and budget your off-grid power system.
+          {deviceCalculators.length} interactive tools to plan, size, wire, diagnose and budget your solar and off-grid power system.
         </p>
       </div>
 
-      {/* Calculator Groups */}
-      {calculatorGroups.map((group, groupIndex) => (
-        <div key={group.title} className="mb-12">
-          {/* Group Header */}
+      {/* Jump links */}
+      <div className="flex flex-wrap gap-2 mb-10">
+        {deviceCalculatorsByCategory.map(cat => (
+          <a key={cat.id} href={`#${cat.id}`} className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:border-blue-600 hover:text-blue-600">
+            <span className="h-2 w-2 rounded-full" style={{ background: cat.accent }} />
+            {cat.name}
+            <span className="text-gray-400">{cat.calculators.length}</span>
+          </a>
+        ))}
+      </div>
+
+      {/* Calculators by category */}
+      {deviceCalculatorsByCategory.map(cat => (
+        <section key={cat.id} id={cat.id} className="mb-12 scroll-mt-24">
           <div className="mb-6">
             <div className="flex items-center mb-2">
-              <div className="h-6 w-1 bg-blue-600 rounded mr-3"></div>
-              <h2 className="text-2xl font-bold text-gray-900">{group.title}</h2>
+              <div className="h-6 w-1 rounded mr-3" style={{ background: cat.accent }}></div>
+              <h2 className="text-2xl font-bold text-gray-900">{cat.name}</h2>
               <span className="ml-3 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs font-medium">
-                {group.calculators.length} {group.calculators.length === 1 ? 'tool' : 'tools'}
+                {cat.calculators.length} tools
               </span>
             </div>
-            <p className="text-sm text-gray-600 ml-4">{group.description}</p>
+            <p className="text-sm text-gray-600 ml-4">{cat.blurb}</p>
           </div>
 
-          {/* Group Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {group.calculators.map(calc => {
-              const Icon = calc.icon
-              return (
-                <Link
-                  key={calc.href}
-                  href={calc.href}
-                  className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-xl transition-all group flex flex-col"
-                >
-                  <div className="flex items-start mb-4">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center mr-4 ${calc.color} flex-shrink-0`}>
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center mb-1 flex-wrap gap-1">
-                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600">
-                          {calc.title}
-                        </h3>
-                        {calc.popular && (
-                          <span className="bg-yellow-400 text-gray-900 px-2 py-0.5 rounded-full text-xs font-bold">
-                            Popular
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-600">{calc.description}</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto">
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {calc.features.map(feature => (
-                        <span key={feature} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-                    <span className="text-blue-600 group-hover:underline text-sm font-medium flex items-center">
-                      Use Calculator <ArrowRight className="h-4 w-4 ml-1" />
-                    </span>
-                  </div>
-                </Link>
-              )
-            })}
+            {cat.calculators.map(calc => (
+              <Link
+                key={calc.slug}
+                href={calc.path}
+                className="relative bg-white border border-gray-200 rounded-lg p-6 hover:shadow-xl transition-all group flex flex-col overflow-hidden"
+              >
+                <span className="absolute inset-x-0 top-0 h-1" style={{ background: cat.accent }} />
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-mono text-xs font-semibold tracking-widest" style={{ color: cat.accent }}>{calc.code}</span>
+                  {popular.has(calc.slug) && (
+                    <span className="bg-yellow-400 text-gray-900 px-2 py-0.5 rounded-full text-xs font-bold">Popular</span>
+                  )}
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 mb-2">{calc.name}</h3>
+                <p className="text-sm text-gray-600 mb-4 line-clamp-3">{calc.description}</p>
+                <span className="mt-auto text-blue-600 group-hover:underline text-sm font-medium flex items-center">
+                  Use Calculator <ArrowRight className="h-4 w-4 ml-1" />
+                </span>
+              </Link>
+            ))}
           </div>
-        </div>
+        </section>
       ))}
-
-      {/* Device series: app/calculators/[slug] */}
-      <section className="mb-12 rounded-3xl bg-gray-950 p-6 md:p-10" style={{ background: 'linear-gradient(160deg, #1f242d, #0b0e13 70%)' }}>
-        <div className="mb-8 max-w-3xl">
-          <p className="text-xs font-semibold tracking-[0.3em] text-gray-400 mb-2">THELOADCALC · MK-IV DEVICE SERIES</p>
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Precision Solar Engineering Tools</h2>
-          <p className="text-gray-400">
-            {deviceCalculators.length} calculators covering panels, batteries, inverters, wiring, sun data and complete system design.
-          </p>
-        </div>
-
-        {deviceCalculatorsByCategory.map(cat => (
-          <div key={cat.id} className="mb-10 last:mb-0">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="h-2.5 w-2.5 rounded-full" style={{ background: cat.accent, boxShadow: `0 0 10px ${cat.accent}` }} />
-              <h3 className="text-lg font-bold text-white">{cat.name}</h3>
-              <span className="text-xs text-gray-500">{cat.blurb}</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {cat.calculators.map(calc => (
-                <Link
-                  key={calc.slug}
-                  href={calc.path}
-                  className="group relative overflow-hidden rounded-2xl border border-white/5 bg-black/30 p-5 transition hover:-translate-y-0.5 hover:border-white/15"
-                >
-                  <span className="absolute inset-x-6 bottom-0 h-px opacity-60 group-hover:opacity-100" style={{ background: `linear-gradient(90deg, transparent, ${cat.accent}, transparent)` }} />
-                  <span className="block font-mono text-xs tracking-widest mb-2" style={{ color: cat.accent }}>{calc.code}</span>
-                  <span className="block font-semibold text-white mb-1.5 group-hover:underline">{calc.name}</span>
-                  <span className="block text-sm text-gray-400 line-clamp-2">{calc.description}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
-      </section>
 
       {/* How to Use */}
       <div className="bg-white border border-gray-200 rounded-lg p-8 mb-12 shadow-sm">
