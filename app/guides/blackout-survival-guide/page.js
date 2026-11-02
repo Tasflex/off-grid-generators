@@ -2,51 +2,84 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Caravan, Check, X, Zap, Battery, Sun, Info, AlertTriangle, ArrowRight, Calendar, Clock, Wrench, Lightbulb, Refrigerator, Laptop, Phone, Fan } from 'lucide-react'
+import { Check, Zap, Battery, Info, AlertTriangle, ArrowRight, Calendar, Clock, Lightbulb, Refrigerator, Phone, Wifi, Fan, Stethoscope, Droplets, Flame } from 'lucide-react'
 
-export default function VanLifeSolarSizingGuide() {
-  const [vanSize, setVanSize] = useState('medium')
-  const [hasFridge, setHasFridge] = useState(true)
-  const [hasAC, setHasAC] = useState(false)
+export default function BlackoutSurvivalGuide() {
+  const [selected, setSelected] = useState(['fridge', 'phones', 'lights', 'router'])
+  const [hours, setHours] = useState(24)
 
-  const vanSizes = {
-    small: { label: 'Small Van (Promaster City)', dailyUsage: 1500, appliances: 'Minimal setup' },
-    medium: { label: 'Medium Van (Sprinter)', dailyUsage: 3000, appliances: 'Standard setup' },
-    large: { label: 'Large Van (Transit)', dailyUsage: 5000, appliances: 'Full setup' }
-  }
-
-  const appliances = [
-    { name: 'Refrigerator (12V)', watts: 45, hours: 24, dailyWh: 1080, icon: Refrigerator },
-    { name: 'LED Lights (4x)', watts: 20, hours: 6, dailyWh: 120, icon: Lightbulb },
-    { name: 'Laptop', watts: 65, hours: 4, dailyWh: 260, icon: Laptop },
-    { name: 'Phone Charger', watts: 10, hours: 2, dailyWh: 20, icon: Phone },
-    { name: 'Ceiling Fan', watts: 30, hours: 8, dailyWh: 240, icon: Fan },
-    { name: 'Water Pump', watts: 60, hours: 1, dailyWh: 60, icon: Zap },
-    { name: 'Wi-Fi Router', watts: 20, hours: 24, dailyWh: 480, icon: Zap },
-    { name: 'Coffee Maker', watts: 800, hours: 0.5, dailyWh: 400, icon: Zap }
+  const devices = [
+    { id: 'fridge', name: 'Refrigerator', icon: Refrigerator, avgWatts: 60, peakWatts: 1000, note: 'Cycles on and off' },
+    { id: 'phones', name: 'Phones (x2)', icon: Phone, avgWatts: 10, peakWatts: 40, note: 'Charging' },
+    { id: 'lights', name: 'LED Lights (x4)', icon: Lightbulb, avgWatts: 40, peakWatts: 40, note: '10W each' },
+    { id: 'router', name: 'Wi-Fi Router + Modem', icon: Wifi, avgWatts: 20, peakWatts: 20, note: 'Runs continuously' },
+    { id: 'cpap', name: 'CPAP Machine', icon: Stethoscope, avgWatts: 20, peakWatts: 60, note: '8 hrs/night, no humidifier' },
+    { id: 'fan', name: 'Box Fan', icon: Fan, avgWatts: 50, peakWatts: 75, note: 'Medium speed' },
+    { id: 'sump', name: 'Sump Pump (1/3 HP)', icon: Droplets, avgWatts: 80, peakWatts: 2000, note: 'Intermittent' }
   ]
 
-  const calculateSetup = () => {
-    const selectedVan = vanSizes[vanSize]
-    let totalDailyWh = selectedVan.dailyUsage
-    if (hasAC) totalDailyWh += 3000
-    if (hasFridge) totalDailyWh += 1080
-
-    const systemSizeKW = totalDailyWh / (5 * 0.8) / 1000
-    const batteryWh = totalDailyWh * 1.2 // 20% buffer
-    const solarWatts = Math.ceil((totalDailyWh / 5) * 1.2) // 5 sun hours, 20% buffer
-    
-    return {
-      totalDailyWh,
-      systemSizeKW: systemSizeKW.toFixed(2),
-      batteryWh: Math.round(batteryWh),
-      solarWatts,
-      recommendedBatteries: Math.ceil(batteryWh / 2048),
-      recommendedPanels: Math.ceil(solarWatts / 200)
-    }
+  const toggleDevice = (id) => {
+    setSelected(prev => prev.includes(id) ? prev.filter(d => d !== id) : [...prev, id])
   }
 
-  const results = calculateSetup()
+  const chosen = devices.filter(d => selected.includes(d.id))
+  const totalWh = chosen.reduce((sum, d) => sum + d.avgWatts * hours, 0)
+  const peakWatts = chosen.reduce((max, d) => Math.max(max, d.peakWatts), 0) +
+    chosen.reduce((sum, d) => sum + d.avgWatts, 0)
+  const neededWh = Math.ceil(totalWh / 0.85 / 100) * 100
+
+  const timeline = [
+    {
+      phase: 'Before: Prepare Now',
+      color: 'blue',
+      items: [
+        'Write down which devices you truly need and their wattage',
+        'Keep a charged power station or battery bank (top it up monthly)',
+        'Store 1 gallon of water per person per day for at least 3 days',
+        'Stock flashlights, headlamps and spare batteries in one known place',
+        'Freeze water bottles to fill empty freezer space',
+        'Install battery-powered smoke and carbon monoxide alarms'
+      ]
+    },
+    {
+      phase: 'During: The First 24 Hours',
+      color: 'yellow',
+      items: [
+        'Keep fridge and freezer doors closed as much as possible',
+        'Unplug sensitive electronics to protect them from surges when power returns',
+        'Switch to LED lighting; never use candles near curtains or unattended',
+        'Power only essentials from your battery and check its percentage every few hours',
+        'Check on elderly neighbors and anyone who relies on medical devices'
+      ]
+    },
+    {
+      phase: 'Extended: Beyond 24 Hours',
+      color: 'orange',
+      items: [
+        'Recharge your power station with solar panels during daylight',
+        'Cycle the fridge: run it 1-2 hours, then off for 2-3 hours',
+        'Move frozen food to a cooler if the freezer starts warming',
+        'Follow local news on a battery or hand-crank radio'
+      ]
+    },
+    {
+      phase: 'After: When Power Returns',
+      color: 'green',
+      items: [
+        'Wait a few minutes before plugging electronics back in',
+        'Check fridge and freezer temperatures before eating stored food',
+        'Recharge your power station and restock used supplies',
+        'Note what ran out first and adjust your plan'
+      ]
+    }
+  ]
+
+  const colorClasses = {
+    blue: 'bg-blue-50 border-blue-200 text-blue-800',
+    yellow: 'bg-yellow-50 border-yellow-200 text-yellow-800',
+    orange: 'bg-orange-50 border-orange-200 text-orange-800',
+    green: 'bg-green-50 border-green-200 text-green-800'
+  }
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -56,222 +89,211 @@ export default function VanLifeSolarSizingGuide() {
         <span className="mx-2">/</span>
         <Link href="/guides" className="hover:text-blue-600">Guides</Link>
         <span className="mx-2">/</span>
-        <span className="text-gray-900">Van Life Solar Sizing</span>
+        <span className="text-gray-900">Blackout Survival Guide</span>
       </nav>
 
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center space-x-2 mb-4">
-          <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-semibold">Van Life</span>
+          <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold">Emergency Preparedness</span>
         </div>
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          How to Size a Solar System for Van Life
+          Blackout Survival Guide: How to Get Through a Power Outage
         </h1>
         <div className="flex items-center space-x-4 text-sm text-gray-600">
-          <span className="font-medium text-gray-900">Jordan Mitchell</span>
+          <span className="font-medium text-gray-900">TheLoadCalc Team</span>
           <span className="flex items-center">
             <Calendar className="h-4 w-4 mr-1" />
-            January 2026
+            November 2026
           </span>
           <span className="flex items-center">
             <Clock className="h-4 w-4 mr-1" />
-            12 min read
+            9 min read
           </span>
         </div>
       </div>
 
-      {/* Interactive Sizing Calculator */}
+      {/* Introduction */}
       <div className="ebay-card p-6 mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Van Solar Sizing Calculator</h2>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            {/* Van Size Selection */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Van Size</label>
-              <div className="grid grid-cols-1 gap-3">
-                {Object.entries(vanSizes).map(([size, data]) => (
-                  <button
-                    key={size}
-                    onClick={() => setVanSize(size)}
-                    className={`p-3 border rounded-lg text-left ${
-                      vanSize === size
-                        ? 'border-blue-600 bg-blue-50'
-                        : 'border-gray-300 hover:border-blue-400'
-                    }`}
-                  >
-                    <div className="font-semibold text-gray-900">{data.label}</div>
-                    <div className="text-sm text-gray-500">{data.appliances}</div>
-                    <div className="text-sm text-blue-600 font-medium mt-1">{data.dailyUsage} Wh/day</div>
-                  </button>
+        <p className="text-gray-600 mb-4">
+          Most blackouts last a few hours, but storms, heat waves and grid failures can leave homes without power
+          for days. Getting through one safely comes down to three things: knowing what you need to keep running,
+          having enough stored power to run it, and protecting your food, water and health while you wait.
+        </p>
+        <div className="bg-red-50 border border-red-200 rounded p-4 text-sm text-gray-700 flex items-start">
+          <AlertTriangle className="h-5 w-5 text-red-600 mr-2 flex-shrink-0" />
+          <span>
+            <strong>Safety first:</strong> Never run a gas generator, grill or camp stove indoors or in a garage.
+            Carbon monoxide poisoning is one of the leading causes of death during outages.
+          </span>
+        </div>
+      </div>
+
+      {/* Timeline */}
+      <div className="ebay-card p-6 mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">What to Do Before, During and After a Blackout</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {timeline.map(stage => (
+            <div key={stage.phase} className={`border rounded-lg p-4 ${colorClasses[stage.color]}`}>
+              <h3 className="font-semibold mb-3">{stage.phase}</h3>
+              <ul className="space-y-2">
+                {stage.items.map(item => (
+                  <li key={item} className="flex items-start text-sm text-gray-700">
+                    <Check className="h-4 w-4 text-green-600 mr-2 mt-0.5 flex-shrink-0" />
+                    {item}
+                  </li>
                 ))}
-              </div>
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Backup power calculator */}
+      <div className="ebay-card p-6 mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">How Much Backup Power Do You Need?</h2>
+        <p className="text-gray-600 mb-6">Pick the devices you'd keep running and how long the outage lasts.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+              {devices.map(device => {
+                const Icon = device.icon
+                const active = selected.includes(device.id)
+                return (
+                  <button
+                    key={device.id}
+                    onClick={() => toggleDevice(device.id)}
+                    className={`flex items-center p-3 rounded border text-left text-sm transition ${active ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
+                  >
+                    <Icon className={`h-5 w-5 mr-2 flex-shrink-0 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
+                    <span>
+                      <span className="font-medium text-gray-900 block">{device.name}</span>
+                      <span className="text-xs text-gray-500">~{device.avgWatts}W avg · {device.note}</span>
+                    </span>
+                  </button>
+                )
+              })}
             </div>
 
-            {/* Options */}
-            <div className="space-y-4">
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  checked={hasFridge}
-                  onChange={(e) => setHasFridge(e.target.checked)}
-                  className="h-5 w-5 text-blue-600 rounded"
-                />
-                <div>
-                  <div className="text-sm font-medium text-gray-900">12V Refrigerator</div>
-                  <div className="text-xs text-gray-500">Adds 1,080 Wh/day</div>
-                </div>
-              </label>
-
-              <label className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  checked={hasAC}
-                  onChange={(e) => setHasAC(e.target.checked)}
-                  className="h-5 w-5 text-blue-600 rounded"
-                />
-                <div>
-                  <div className="text-sm font-medium text-gray-900">Portable AC</div>
-                  <div className="text-xs text-gray-500">Adds 3,000 Wh/day</div>
-                </div>
-              </label>
-            </div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Outage Length: {hours} hours
+            </label>
+            <input
+              type="range"
+              value={hours}
+              onChange={(e) => setHours(parseInt(e.target.value))}
+              className="w-full"
+              min="4"
+              max="72"
+              step="4"
+            />
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-4">Your Requirements</h3>
-            
-            <div className="space-y-4">
-              <div className="bg-white rounded p-4 text-center">
-                <div className="text-sm text-gray-500">Total Daily Usage</div>
-                <div className="text-3xl font-bold text-blue-600">
-                  {results.totalDailyWh.toLocaleString()} Wh
-                </div>
-              </div>
+            <h3 className="font-semibold text-gray-900 mb-4">You'll Need About</h3>
+            <div className="bg-white rounded p-4 text-center mb-4">
+              <div className="text-4xl font-bold text-blue-600 mb-2">{neededWh.toLocaleString()} Wh</div>
+              <div className="text-sm text-gray-600">Battery capacity for {hours} hours</div>
+            </div>
+            <div className="bg-white rounded p-3 text-center mb-4">
+              <div className="text-sm text-gray-500">Minimum Inverter Output</div>
+              <div className="text-lg font-semibold">{peakWatts.toLocaleString()}W</div>
+            </div>
+            <p className="text-xs text-gray-500">
+              Includes 15% for inverter losses. Inverter output covers the largest startup surge plus everything
+              else running at once.
+            </p>
+          </div>
+        </div>
+      </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="text-xs text-gray-500">Battery Bank</div>
-                  <div className="text-lg font-semibold">{results.batteryWh.toLocaleString()} Wh</div>
-                </div>
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="text-xs text-gray-500">Solar Panels</div>
-                  <div className="text-lg font-semibold">{results.solarWatts} W</div>
-                </div>
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="text-xs text-gray-500">Batteries (2048Wh)</div>
-                  <div className="text-lg font-semibold">{results.recommendedBatteries}</div>
-                </div>
-                <div className="bg-white rounded p-3 text-center">
-                  <div className="text-xs text-gray-500">Panels (200W)</div>
-                  <div className="text-lg font-semibold">{results.recommendedPanels}</div>
-                </div>
-              </div>
+      {/* Power priorities */}
+      <div className="ebay-card p-6 mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Prioritize What You Power</h2>
+        <div className="space-y-3">
+          <div className="flex items-start p-4 bg-red-50 rounded">
+            <span className="font-bold text-red-700 mr-3">1</span>
+            <div>
+              <h3 className="font-semibold text-gray-900">Medical devices</h3>
+              <p className="text-sm text-gray-600">CPAP machines, oxygen concentrators and refrigerated medication always come first. See our <Link href="/guides/medical-device-power" className="text-blue-600 hover:underline">medical device power guide</Link>.</p>
+            </div>
+          </div>
+          <div className="flex items-start p-4 bg-orange-50 rounded">
+            <span className="font-bold text-orange-700 mr-3">2</span>
+            <div>
+              <h3 className="font-semibold text-gray-900">Communication and light</h3>
+              <p className="text-sm text-gray-600">Phones, a radio, the Wi-Fi router and LED lighting use very little power but matter most for safety.</p>
+            </div>
+          </div>
+          <div className="flex items-start p-4 bg-yellow-50 rounded">
+            <span className="font-bold text-yellow-700 mr-3">3</span>
+            <div>
+              <h3 className="font-semibold text-gray-900">Food storage</h3>
+              <p className="text-sm text-gray-600">A closed fridge keeps food safe for about 4 hours; a full freezer holds for about 48 hours (24 if half full). See <Link href="/blog/how-many-watts-refrigerator" className="text-blue-600 hover:underline">how many watts a refrigerator uses</Link>.</p>
+            </div>
+          </div>
+          <div className="flex items-start p-4 bg-green-50 rounded">
+            <span className="font-bold text-green-700 mr-3">4</span>
+            <div>
+              <h3 className="font-semibold text-gray-900">Comfort</h3>
+              <p className="text-sm text-gray-600">Fans, electric blankets and entertainment come last. Space heaters and air conditioners drain most portable batteries within an hour or two.</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Appliance Power Guide */}
+      {/* Power options */}
       <div className="ebay-card p-6 mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Van Life Appliance Power Guide</h2>
-        <p className="text-gray-600 mb-4">
-          Here's what typical van life appliances use:
-        </p>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50">
-                <th className="px-4 py-3 text-left text-sm font-semibold">Appliance</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold">Watts</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold">Hours/Day</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold">Daily Wh</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold">Priority</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appliances.map(appliance => (
-                <tr key={appliance.name} className="border-t">
-                  <td className="px-4 py-3 text-sm">
-                    <div className="flex items-center">
-                      <appliance.icon className="h-4 w-4 text-blue-600 mr-2" />
-                      {appliance.name}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-sm">{appliance.watts}W</td>
-                  <td className="px-4 py-3 text-sm">{appliance.hours}h</td>
-                  <td className="px-4 py-3 text-sm font-semibold">{appliance.dailyWh}Wh</td>
-                  <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                      appliance.dailyWh > 500 ? 'bg-red-100 text-red-800' :
-                      appliance.dailyWh > 200 ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
-                    }`}>
-                      {appliance.dailyWh > 500 ? 'High' : appliance.dailyWh > 200 ? 'Medium' : 'Low'}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Choosing a Backup Power Source</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="border rounded-lg p-4">
+            <Battery className="h-6 w-6 text-green-600 mb-2" />
+            <h3 className="font-semibold text-gray-900 mb-2">Portable Power Station</h3>
+            <p className="text-sm text-gray-600 mb-3">Silent and safe indoors. 1,000-2,000Wh covers essentials for a day; add solar panels to recharge.</p>
+            <Link href="/products/portable-power-stations" className="text-blue-600 hover:underline text-sm font-medium">Browse power stations</Link>
+          </div>
+          <div className="border rounded-lg p-4">
+            <Zap className="h-6 w-6 text-blue-600 mb-2" />
+            <h3 className="font-semibold text-gray-900 mb-2">Home Battery Backup</h3>
+            <p className="text-sm text-gray-600 mb-3">Expandable systems of 3,600Wh and up for multi-day outages and larger loads like sump pumps.</p>
+            <Link href="/guides/home-backup-systems" className="text-blue-600 hover:underline text-sm font-medium">Home backup guide</Link>
+          </div>
+          <div className="border rounded-lg p-4">
+            <Flame className="h-6 w-6 text-orange-600 mb-2" />
+            <h3 className="font-semibold text-gray-900 mb-2">Gas Generator</h3>
+            <p className="text-sm text-gray-600 mb-3">High output for long outages, but loud, needs fuel storage and must run outdoors, at least 20 feet from the house.</p>
+            <Link href="/comparisons/solar-vs-gas-generator" className="text-blue-600 hover:underline text-sm font-medium">Solar vs gas compared</Link>
+          </div>
         </div>
       </div>
 
-      {/* Recommended Setup */}
+      {/* Tip */}
       <div className="ebay-card p-6 mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Recommended Van Life Setup</h2>
-        
-        <div className="space-y-6">
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Complete System Components</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { component: 'Solar Panels', detail: `${results.recommendedPanels} × 200W panels = ${results.recommendedPanels * 200}W`, href: '/products/solar-panels' },
-                { component: 'Battery Bank', detail: `${results.recommendedBatteries} × 2,048Wh batteries = ${results.recommendedBatteries * 2048}Wh`, href: '/products/battery-backups' },
-                { component: 'Inverter', detail: '2,000W pure sine wave inverter', href: '/products/accessories' },
-                { component: 'Charge Controller', detail: 'MPPT charge controller (30A+)', href: '/products/accessories' },
-                { component: 'Battery Monitor', detail: 'Bluetooth battery monitor', href: '/products/accessories' },
-                { component: 'Wiring & Fuses', detail: '10AWG solar cable, fuse holder', href: '/products/accessories' }
-              ].map(item => (
-                <Link key={item.component} href={item.href} className="bg-gray-50 rounded p-3 hover:bg-blue-50 transition group">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-gray-900">{item.component}</div>
-                      <div className="text-sm text-gray-500">{item.detail}</div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-blue-600 group-hover:translate-x-1 transition" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-yellow-50 border border-yellow-200 rounded p-4">
-            <div className="flex items-start">
-              <AlertTriangle className="h-5 w-5 text-yellow-600 mr-2 flex-shrink-0" />
-              <p className="text-sm text-yellow-800">
-                <strong>Important:</strong> Always oversize your system by 20-30%. Cloudy days, seasonal changes, 
-                and battery degradation will reduce your available power.
-              </p>
-            </div>
-          </div>
+        <div className="bg-blue-50 border border-blue-200 rounded p-4">
+          <h3 className="font-semibold text-blue-800 mb-2 flex items-center">
+            <Info className="h-5 w-5 mr-2" />
+            Test Your Plan Before You Need It
+          </h3>
+          <p className="text-sm text-gray-600">
+            Once a year, run your essentials from your backup power for an evening. You'll find out how long your
+            battery really lasts and which cables or adapters are missing while it's still easy to fix.
+          </p>
         </div>
       </div>
 
       {/* CTA */}
-      <div className="ebay-card p-8 bg-gradient-to-r from-blue-50 to-yellow-50 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-3">
-          Ready to Build Your Van Solar System?
-        </h2>
+      <div className="ebay-card p-6 text-center bg-gradient-to-r from-blue-50 to-yellow-50">
+        <h2 className="text-xl font-bold text-gray-900 mb-3">Build Your Emergency Power Plan</h2>
         <p className="text-gray-600 mb-4">
-          Use our calculators to get exact product recommendations for your van build.
+          Size a backup system around the exact devices in your home.
         </p>
         <div className="flex justify-center space-x-4">
-          <Link href="/calculators/solar-sizing" className="ebay-btn-primary">
-            Calculate Your System
+          <Link href="/calculators/solar-sizing" className="ebay-btn-primary inline-flex items-center">
+            Solar Sizing Calculator <ArrowRight className="h-4 w-4 ml-1" />
           </Link>
-          <Link href="/products/solar-panels" className="ebay-btn-secondary">
-            Shop Solar Panels
+          <Link href="/blog/blackout-emergency-power-plan" className="ebay-btn-secondary">
+            Emergency Power Plan
           </Link>
         </div>
       </div>
