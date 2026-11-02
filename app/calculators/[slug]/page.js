@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Orbitron, JetBrains_Mono } from 'next/font/google'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import CalcDevice from '../../../components/calc/CalcDevice'
@@ -8,9 +9,8 @@ import { getPageSeo, SITE_URL } from '../../../lib/seo'
 const display = Orbitron({ subsets: ['latin'], weight: ['600', '800'], variable: '--font-display' })
 const mono = JetBrains_Mono({ subsets: ['latin'], weight: ['400', '600'], variable: '--font-mono' })
 
-// Hand-built calculators keep their own folders; this route serves the device-series calculators
-export const dynamicParams = false
-
+// Hand-built calculators keep their own folders; this route serves the device-series calculators.
+// The root layout renders dynamically, so unknown slugs still reach the page and need notFound().
 export function generateStaticParams() {
   return deviceCalculators.map(c => ({ slug: c.slug }))
 }
@@ -26,6 +26,8 @@ function resolveRelated(ref) {
 
 export default function DeviceCalculatorPage({ params }) {
   const calc = getDeviceCalculator(params.slug)
+  if (!calc) notFound()
+
   const category = categories[calc.category]
   const url = `${SITE_URL}${calc.path}`
   const related = calc.related.map(resolveRelated).filter(Boolean)
