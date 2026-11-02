@@ -32,23 +32,7 @@ function shouldTrackPage(path) {
 
 export async function POST(request) {
   try {
-    // ============================================
-    // DEBUG LOGGING - Enhanced
-    // ============================================
     const body = await request.json()
-    console.log('=== 🚀 Analytics POST received ===')
-    console.log('📌 Type:', body.type)
-    console.log('📌 Path:', body.path || body.page_path || 'N/A')
-    console.log('📌 Timestamp:', body.timestamp || new Date().toISOString())
-    console.log('📌 Full Body:', JSON.stringify(body, null, 2))
-    
-    // Log request headers for debugging
-    console.log('📌 Headers:', {
-      'user-agent': request.headers.get('user-agent') || 'N/A',
-      'referer': request.headers.get('referer') || 'N/A',
-      'x-forwarded-for': request.headers.get('x-forwarded-for') || 'N/A'
-    })
-    console.log('========================================\n')
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -67,7 +51,6 @@ export async function POST(request) {
     if (body.type === 'pageview') {
       const path = body.path || body.page_path || '/'
       if (!shouldTrackPage(path)) {
-        console.log(`⏭️ Skipping tracking for admin/internal page: ${path}`)
         return NextResponse.json({
           success: true,
           message: 'Page not tracked (admin/internal)',
@@ -92,7 +75,6 @@ export async function POST(request) {
           screen_resolution: body.screen_resolution || null,
           timestamp: body.timestamp || new Date().toISOString()
         }
-        console.log(`📊 Tracking pageview: ${insertData.path}`)
         break
       
       case 'affiliate_click':
@@ -147,10 +129,6 @@ export async function POST(request) {
         })
     }
 
-    // Log the insert data before sending to Supabase
-    console.log(`📤 Sending to Supabase table: ${tableName}`)
-    console.log('📤 Insert Data:', JSON.stringify(insertData, null, 2))
-
     const baseUrl = supabaseUrl.endsWith('/') ? supabaseUrl.slice(0, -1) : supabaseUrl
     const url = `${baseUrl}/rest/v1/${tableName}`
 
@@ -177,9 +155,6 @@ export async function POST(request) {
     }
 
     const result = await response.json()
-    console.log(`✅ Analytics tracked successfully: ${body.type}`)
-    console.log('✅ Result:', JSON.stringify(result, null, 2))
-    console.log('========================================\n')
 
     return NextResponse.json({
       success: true,
