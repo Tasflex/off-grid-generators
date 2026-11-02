@@ -1,7 +1,6 @@
-'use client'
-
 import Link from 'next/link'
 import { Calculator, Battery, Wallet, Sun, Timer, Grid, Zap, Cpu, ArrowRight, TrendingDown, Flame, Cloud, Thermometer, DollarSign, Calendar, Wind } from 'lucide-react'
+import { deviceCalculators, deviceCalculatorsByCategory } from '../../lib/calc'
 
 const calculatorGroups = [
   {
@@ -160,7 +159,7 @@ const calculatorGroups = [
 ]
 
 export default function CalculatorsPage() {
-  const totalCalculators = calculatorGroups.reduce((sum, g) => sum + g.calculators.length, 0)
+  const totalCalculators = calculatorGroups.reduce((sum, g) => sum + g.calculators.length, 0) + deviceCalculators.length
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -173,7 +172,7 @@ export default function CalculatorsPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">Free Calculators</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">Free Solar, Battery & Inverter Calculators</h1>
         <p className="text-gray-600">
           {totalCalculators} interactive tools to help you plan, size, diagnose, and budget your off-grid power system.
         </p>
@@ -241,6 +240,41 @@ export default function CalculatorsPage() {
           </div>
         </div>
       ))}
+
+      {/* Device series: app/calculators/[slug] */}
+      <section className="mb-12 rounded-3xl bg-gray-950 p-6 md:p-10" style={{ background: 'linear-gradient(160deg, #1f242d, #0b0e13 70%)' }}>
+        <div className="mb-8 max-w-3xl">
+          <p className="text-xs font-semibold tracking-[0.3em] text-gray-400 mb-2">THELOADCALC · MK-IV DEVICE SERIES</p>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">Precision Solar Engineering Tools</h2>
+          <p className="text-gray-400">
+            {deviceCalculators.length} calculators covering panels, batteries, inverters, wiring, sun data and complete system design.
+          </p>
+        </div>
+
+        {deviceCalculatorsByCategory.map(cat => (
+          <div key={cat.id} className="mb-10 last:mb-0">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ background: cat.accent, boxShadow: `0 0 10px ${cat.accent}` }} />
+              <h3 className="text-lg font-bold text-white">{cat.name}</h3>
+              <span className="text-xs text-gray-500">{cat.blurb}</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {cat.calculators.map(calc => (
+                <Link
+                  key={calc.slug}
+                  href={calc.path}
+                  className="group relative overflow-hidden rounded-2xl border border-white/5 bg-black/30 p-5 transition hover:-translate-y-0.5 hover:border-white/15"
+                >
+                  <span className="absolute inset-x-6 bottom-0 h-px opacity-60 group-hover:opacity-100" style={{ background: `linear-gradient(90deg, transparent, ${cat.accent}, transparent)` }} />
+                  <span className="block font-mono text-xs tracking-widest mb-2" style={{ color: cat.accent }}>{calc.code}</span>
+                  <span className="block font-semibold text-white mb-1.5 group-hover:underline">{calc.name}</span>
+                  <span className="block text-sm text-gray-400 line-clamp-2">{calc.description}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
 
       {/* How to Use */}
       <div className="bg-white border border-gray-200 rounded-lg p-8 mb-12 shadow-sm">

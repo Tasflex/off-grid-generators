@@ -1,3 +1,5 @@
+import { deviceCalculators } from '../lib/calc'
+
 export default function sitemap() {
   const baseUrl = 'https://theloadcalc.com'
   
@@ -204,10 +206,15 @@ export default function sitemap() {
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
     { url: `${baseUrl}/privacy-policy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
     { url: `${baseUrl}/terms`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.6 },
-    
-    // Search
-    { url: `${baseUrl}/search`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 }
   ]
 
-  return routes
+  // Device-series calculators (app/calculators/[slug])
+  const deviceRoutes = deviceCalculators.map(c => ({
+    url: `${baseUrl}${c.path}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.8
+  }))
+
+  return [...routes, ...deviceRoutes]
 }

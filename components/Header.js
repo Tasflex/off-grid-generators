@@ -38,6 +38,10 @@ export default function Header() {
         { label: 'Charge Time Calculator', href: '/calculators/charge-time' },
         { label: 'Charge Controller Sizing', href: '/calculators/charge-controller-sizing' },
         { label: 'Inverter Sizing', href: '/calculators/inverter-sizing' },
+        { label: 'Off-Grid System Sizing', href: '/calculators/off-grid-system-sizing' },
+        { label: 'Battery Bank Sizing', href: '/calculators/battery-bank-sizing' },
+        { label: 'Solar Wire Size', href: '/calculators/solar-wire-size' },
+        { label: 'All Calculators →', href: '/calculators' },
       ]
     },
     { label: 'Guides', href: '/guides' },
