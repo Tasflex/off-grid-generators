@@ -202,7 +202,7 @@ export default function NotFound() {
                 <div className="font-semibold text-gray-900 mb-1">Read Guides</div>
                 <div className="text-xs text-gray-500">Expert buying advice</div>
               </Link>
-              <Link href="/about/contact" className="group bg-white rounded-lg p-4 text-center hover:shadow-md transition">
+              <Link href="/contact" className="group bg-white rounded-lg p-4 text-center hover:shadow-md transition">
                 <MapPin className="h-8 w-8 text-yellow-600 mx-auto mb-2 group-hover:scale-110 transition" />
                 <div className="font-semibold text-gray-900 mb-1">Contact Us</div>
                 <div className="text-xs text-gray-500">We're here to help</div>
@@ -248,9 +248,9 @@ export default function NotFound() {
             <div>
               <h4 className="text-white font-semibold mb-3">Support</h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/about/contact" className="hover:text-white">Contact Us</Link></li>
-                <li><Link href="/about/affiliate-disclosure" className="hover:text-white">Affiliate Disclosure</Link></li>
-                <li><Link href="/about/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
+                <li><Link href="/contact" className="hover:text-white">Contact Us</Link></li>
+                <li><Link href="/affiliate-disclosure" className="hover:text-white">Affiliate Disclosure</Link></li>
+                <li><Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
               </ul>
             </div>
           </div>

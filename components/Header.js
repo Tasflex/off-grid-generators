@@ -94,7 +94,7 @@ export default function Header() {
               <Link href="/calculators/solar-sizing" className="text-sm font-medium text-gray-700 hover:text-blue-600">
                 Sizing Calculator
               </Link>
-              <Link href="/about/contact" className="text-sm font-medium text-gray-700 hover:text-blue-600">
+              <Link href="/contact" className="text-sm font-medium text-gray-700 hover:text-blue-600">
                 Contact
               </Link>
             </div>

@@ -119,7 +119,7 @@ export default function AffiliateDisclosurePage() {
             If you have any questions about our affiliate relationships or how we make money, 
             please don't hesitate to contact us.
           </p>
-          <Link href="/about/contact" className="ebay-btn-primary inline-block">
+          <Link href="/contact" className="ebay-btn-primary inline-block">
             Contact Us
           </Link>
         </div>

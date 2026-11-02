@@ -254,7 +254,7 @@ export default function TermsOfServicePage() {
           </div>
           <div>
             <span className="font-semibold text-gray-900">Website:</span>
-            <Link href="/about/contact" className="text-blue-600 hover:underline"> Contact Form</Link>
+            <Link href="/contact" className="text-blue-600 hover:underline"> Contact Form</Link>
           </div>
         </div>
       </div>
@@ -262,7 +262,7 @@ export default function TermsOfServicePage() {
       {/* Footer Note */}
       <div className="text-center pb-8">
         <p className="text-sm text-gray-500">
-          © 2026 TheLoadCalc. All rights reserved. | <Link href="/about/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link> | <Link href="/about/affiliate-disclosure" className="text-blue-600 hover:underline">Affiliate Disclosure</Link>
+          © 2026 TheLoadCalc. All rights reserved. | <Link href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</Link> | <Link href="/affiliate-disclosure" className="text-blue-600 hover:underline">Affiliate Disclosure</Link>
         </p>
       </div>
     </div>
