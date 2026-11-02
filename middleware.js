@@ -1,25 +1,20 @@
 // middleware.js
 import { NextResponse } from 'next/server'
+import { SESSION_COOKIE, verifySessionToken } from './lib/adminAuth'
 
-export function middleware(request) {
+export async function middleware(request) {
   const { pathname } = request.nextUrl
 
-  // Protect all admin routes EXCEPT the login page
-  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
-    // Check if authenticated via cookie
-    const adminCookie = request.cookies.get('admin_authenticated')
+  if (pathname.startsWith('/admin')) {
+    const isLoggedIn = await verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value)
 
-    if (!adminCookie || adminCookie.value !== 'true') {
-      // Redirect to login
+    // Protect all admin routes EXCEPT the login page
+    if (!isLoggedIn && !pathname.startsWith('/admin/login')) {
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
-  }
 
-  // If on login page and already authenticated, redirect to automation
-  if (pathname === '/admin/login') {
-    const adminCookie = request.cookies.get('admin_authenticated')
-
-    if (adminCookie && adminCookie.value === 'true') {
+    // If on login page and already authenticated, redirect to automation
+    if (isLoggedIn && pathname === '/admin/login') {
       return NextResponse.redirect(new URL('/admin/automation', request.url))
     }
   }

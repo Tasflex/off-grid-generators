@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { isAdmin } from '../../../lib/adminAuth'
 
 // Helper function to check if a path is an admin page
 function isAdminPath(path) {
@@ -197,7 +198,12 @@ export async function POST(request) {
   }
 }
 
+// GET - dashboard data, admin only (POST above is the public pageview tracker)
 export async function GET(request) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY

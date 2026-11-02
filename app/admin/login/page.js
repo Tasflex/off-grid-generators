@@ -9,14 +9,18 @@ export default function AdminLoginPage() {
   const [error, setError] = useState('')
   const router = useRouter()
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    
-    const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'theloadcalc_admin_2026'
-    
-    if (password === correctPassword) {
-      // Set cookie for middleware
-      document.cookie = 'admin_authenticated=true; path=/; max-age=86400'
+    setError('')
+
+    // Password is checked on the server, which sets an httpOnly session cookie
+    const response = await fetch('/api/admin/session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password })
+    })
+
+    if (response.ok) {
       router.push('/admin/automation')
     } else {
       setError('Invalid password')

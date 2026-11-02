@@ -106,16 +106,6 @@ export default function AutomationDashboard() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // First check if cookie exists
-        const cookies = document.cookie.split(';')
-        const adminCookie = cookies.find(c => c.trim().startsWith('admin_authenticated='))
-        
-        if (!adminCookie || adminCookie.split('=')[1] !== 'true') {
-          setAuthError('Session expired. Please login again.')
-          setIsLoading(false)
-          return
-        }
-
         // Try to fetch data to verify authentication
         const response = await fetch('/api/automate/accounts')
         
@@ -292,8 +282,8 @@ export default function AutomationDashboard() {
     }
   }
 
-  const handleLogout = () => {
-    document.cookie = 'admin_authenticated=; path=/; max-age=0'
+  const handleLogout = async () => {
+    await fetch('/api/admin/session', { method: 'DELETE' })
     window.location.href = '/admin/login'
   }
 

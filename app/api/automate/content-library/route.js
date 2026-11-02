@@ -1,12 +1,5 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-
-// Helper to check authentication using cookies
-function checkAuth() {
-  const cookieStore = cookies()
-  const adminCookie = cookieStore.get('admin_authenticated')
-  return adminCookie && adminCookie.value === 'true'
-}
+import { isAdmin } from '../../../../lib/adminAuth'
 
 // Your content library
 const contentLibrary = [
@@ -423,9 +416,9 @@ const contentLibrary = [
   }
 ]
 
-// GET endpoint with authentication using cookies
+// GET endpoint with authentication
 export async function GET(request) {
-  if (!checkAuth()) {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   
@@ -435,9 +428,9 @@ export async function GET(request) {
   })
 }
 
-// POST endpoint with authentication using cookies
+// POST endpoint with authentication
 export async function POST(request) {
-  if (!checkAuth()) {
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   

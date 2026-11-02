@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { isAdmin, isCronRequest } from '../../../../lib/adminAuth'
 import { createClient } from '@supabase/supabase-js'
 import { generatePlatformCaptions, publishToZernio, generateVisualPrompt } from '../../../../lib/contentGenerator'
 import { generatePlatformSpecificImage } from '../../../../lib/imageGenerator'
@@ -11,13 +11,6 @@ const supabase = createClient(
 
 // Base URL for building destination links
 const SITE_BASE_URL = 'https://theloadcalc.com'
-
-// Helper to check authentication using cookies
-function checkAuth() {
-  const cookieStore = cookies()
-  const adminCookie = cookieStore.get('admin_authenticated')
-  return adminCookie && adminCookie.value === 'true'
-}
 
 // Content library
 const contentLibrary = [
@@ -63,8 +56,9 @@ const contentLibrary = [
 ]
 
 export async function POST(request) {
-  // Check authentication using cookies
-  if (!checkAuth()) {
+  // Check authentication
+  // Admin session, or the cron job (/root/auto-publish.sh) sending x-cron-secret
+  if (!isCronRequest(request) && !(await isAdmin())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   

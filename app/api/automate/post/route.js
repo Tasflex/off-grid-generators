@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { isAdmin } from '../../../../lib/adminAuth'
 import axios from 'axios'
 import { generateContent, summarizeForSocial, publishToZernio } from '../../../../lib/contentGenerator'
 import { generateBlogPostImage, generateProductImage } from '../../../../lib/imageGenerator'
@@ -7,16 +7,9 @@ import { generateBlogPostImage, generateProductImage } from '../../../../lib/ima
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-// Helper to check authentication using cookies
-function checkAuth() {
-  const cookieStore = cookies()
-  const adminCookie = cookieStore.get('admin_authenticated')
-  return adminCookie && adminCookie.value === 'true'
-}
-
 export async function POST(request) {
-  // Check authentication using cookies
-  if (!checkAuth()) {
+  // Check authentication
+  if (!(await isAdmin())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   
