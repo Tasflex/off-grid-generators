@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { useState } from 'react'
 import { Star, Check, X, Zap, Battery, Shield, Timer, ThumbsUp, ThumbsDown, Calendar, Clock } from 'lucide-react'
 
@@ -316,6 +317,7 @@ export default function EcoFlowDeltaProReview() {
           <p className="text-sm text-gray-600">Calculate your refrigerator power needs</p>
         </Link>
       </div>
+      <RelatedPosts slugs={['surge-watts-vs-running-watts', 'pass-through-charging-ups-power-station', 'transfer-switch-vs-interlock-kit', 'power-station-storage-maintenance']} />
     </div>
   )
 }

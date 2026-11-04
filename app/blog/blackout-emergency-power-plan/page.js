@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { AlertTriangle, Check, X, Zap, Battery, Shield, ArrowRight, Calendar, Clock, Info, Home, Phone, Refrigerator, Heart } from 'lucide-react'
 
 export default function BlackoutEmergencyPowerPlan() {
@@ -207,6 +208,7 @@ export default function BlackoutEmergencyPowerPlan() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['winter-power-outage-checklist', 'chest-freezer-power-station', 'keep-internet-on-power-outage', 'transfer-switch-vs-interlock-kit']} />
     </div>
   )
 }

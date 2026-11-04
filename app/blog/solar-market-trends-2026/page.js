@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { TrendingUp, Zap, Battery, Check, ArrowRight, Calendar, Clock, Info, DollarSign } from 'lucide-react'
 
 export default function SolarMarketTrends() {
@@ -136,6 +137,7 @@ export default function SolarMarketTrends() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['tiny-house-solar-system', 'why-solar-panels-produce-less-than-rated', 'mppt-vs-pwm-charge-controller', 'portable-solar-panel-buying-guide']} />
     </div>
   )
 }

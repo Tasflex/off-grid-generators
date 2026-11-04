@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { useState } from 'react'
 import { Home, Calendar, Clock, Zap, Battery, Calculator, Info, AlertTriangle, Check } from 'lucide-react'
 
@@ -339,6 +340,7 @@ export default function WhatSizeSolarGeneratorHouse() {
           Use Solar Sizing Calculator
         </Link>
       </div>
+      <RelatedPosts slugs={['transfer-switch-vs-interlock-kit', 'sump-pump-battery-backup', 'well-pump-power-outage', 'chest-freezer-power-station']} />
     </div>
   )
 }

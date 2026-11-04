@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Search, Calendar, Clock, Tag, TrendingUp, BookOpen, Zap, Wrench, Home, Caravan, Shield, X } from 'lucide-react'
+import { Search, Calendar, Clock, Tag, TrendingUp, BookOpen, Zap, Wrench, Home, Caravan, Shield, X, Calculator } from 'lucide-react'
+import { blogPosts as dataBlogPosts } from '../../lib/blog/posts'
 
 const blogCategories = [
   { name: 'All', slug: 'all', icon: BookOpen },
@@ -11,6 +12,7 @@ const blogCategories = [
   { name: 'Home Backup', slug: 'home-backup', icon: Home },
   { name: 'Product Reviews', slug: 'product-reviews', icon: Zap },
   { name: 'DIY & Installation', slug: 'diy-installation', icon: Wrench },
+  { name: 'Power Basics', slug: 'power-basics', icon: Calculator },
   { name: 'Solar News', slug: 'solar-news', icon: TrendingUp },
 ]
 
@@ -21,10 +23,11 @@ const categorySlugMap = {
   'Home Backup': 'home-backup',
   'Product Reviews': 'product-reviews',
   'DIY & Installation': 'diy-installation',
+  'Power Basics': 'power-basics',
   'Solar News': 'solar-news'
 }
 
-const blogPosts = [
+const legacyBlogPosts = [
   {
     id: 1,
     title: 'Best Solar Generators 2026: Complete Buying Guide',
@@ -102,19 +105,6 @@ const blogPosts = [
     author: 'Jordan Mitchell',
     featured: false,
     tags: ['Battery Technology', 'Storage', 'Education']
-  },
-  {
-    id: 7,
-    title: 'CPAP Battery Backup: How to Keep Your Machine Running',
-    excerpt: 'CPAP users need reliable power. Here\'s how to calculate battery needs and choose the right backup solution.',
-    category: 'Emergency Preparedness',
-    slug: 'cpap-battery-backup-guide',
-    image: '/images/blog/cpap-backup.jpg',
-    date: '2025-12-10',
-    readTime: '7 min read',
-    author: 'Jordan Mitchell',
-    featured: false,
-    tags: ['CPAP', 'Medical', 'Backup Power']
   },
   {
     id: 8,
@@ -235,6 +225,24 @@ const blogPosts = [
   }
 ]
 
+// Data-driven posts (lib/blog) first, newest first, then the hand-built posts
+const blogPosts = [
+  ...dataBlogPosts.map((p, i) => ({
+    id: 100 + i,
+    title: p.title,
+    excerpt: p.excerpt,
+    category: p.category,
+    slug: p.slug,
+    image: p.image,
+    date: p.date,
+    readTime: p.readTime,
+    author: p.author,
+    featured: false,
+    tags: p.tags
+  })),
+  ...legacyBlogPosts
+]
+
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -313,6 +321,7 @@ export default function BlogPage() {
       'Van Life & RV': 'from-green-500 to-green-700',
       'Home Backup': 'from-purple-500 to-purple-700',
       'DIY & Installation': 'from-orange-500 to-orange-700',
+      'Power Basics': 'from-teal-500 to-teal-700',
       'Solar News': 'from-yellow-500 to-yellow-700'
     }
     return colors[category] || 'from-gray-500 to-gray-700'

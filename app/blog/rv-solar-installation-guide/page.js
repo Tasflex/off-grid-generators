@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Caravan, Zap, Battery, Sun, Check, X, ArrowRight, Calendar, Clock, Info, Wrench, AlertTriangle } from 'lucide-react'
 
 export default function RVSolarInstallationGuide() {
@@ -180,6 +181,7 @@ export default function RVSolarInstallationGuide() {
           </div>
         </div>
       </div>
+      <RelatedPosts slugs={['mppt-vs-pwm-charge-controller', '12v-vs-24v-vs-48v-solar-system', 'charge-power-station-from-car', '12v-fridge-off-grid-power']} />
     </div>
   )
 }

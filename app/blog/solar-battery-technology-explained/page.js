@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Battery, Zap, Check, X, ArrowRight, Calendar, Clock, Info, AlertTriangle } from 'lucide-react'
 
 export default function SolarBatteryTechnology() {
@@ -142,6 +143,7 @@ export default function SolarBatteryTechnology() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['lifepo4-battery-cold-weather', 'power-station-storage-maintenance', '12v-vs-24v-vs-48v-solar-system', 'watts-vs-watt-hours-explained']} />
     </div>
   )
 }

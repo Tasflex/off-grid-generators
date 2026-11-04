@@ -1,4 +1,5 @@
 import { deviceCalculators } from '../lib/calc'
+import { blogPosts } from '../lib/blog/posts'
 
 export default function sitemap() {
   const baseUrl = 'https://theloadcalc.com'
@@ -195,5 +196,13 @@ export default function sitemap() {
     priority: 0.8
   }))
 
-  return [...routes, ...deviceRoutes]
+  // Data-driven blog posts (app/blog/[slug])
+  const blogRoutes = blogPosts.map(p => ({
+    url: `${baseUrl}${p.path}`,
+    lastModified: new Date(p.date),
+    changeFrequency: 'monthly',
+    priority: 0.8
+  }))
+
+  return [...routes, ...deviceRoutes, ...blogRoutes]
 }

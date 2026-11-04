@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { useState } from 'react'
 import { Refrigerator, Zap, Battery, Info, AlertTriangle, Calendar, Clock, Check } from 'lucide-react'
 
@@ -294,6 +295,7 @@ export default function RefrigeratorWattsGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['surge-watts-vs-running-watts', 'chest-freezer-power-station', '12v-fridge-off-grid-power', 'watts-vs-watt-hours-explained']} />
     </div>
   )
 }

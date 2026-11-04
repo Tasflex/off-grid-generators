@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Star, Check, X, Zap, Battery, Weight, Shield, Trophy, ArrowRight, Calendar, Clock, Info } from 'lucide-react'
 
 export default function EcoFlowVsBluettiBlog() {
@@ -259,6 +260,7 @@ export default function EcoFlowVsBluettiBlog() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['watts-vs-watt-hours-explained', 'surge-watts-vs-running-watts', 'pass-through-charging-ups-power-station', 'portable-solar-panel-buying-guide']} />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Sun, Flame, Check, X, ArrowRight, Calendar, Clock, Info, TrendingUp } from 'lucide-react'
 
 export default function SolarVsTraditionalGenerator() {
@@ -168,6 +169,7 @@ export default function SolarVsTraditionalGenerator() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['power-tools-solar-generator-jobsite', 'transfer-switch-vs-interlock-kit', 'winter-power-outage-checklist', 'space-heater-solar-generator']} />
     </div>
   )
 }

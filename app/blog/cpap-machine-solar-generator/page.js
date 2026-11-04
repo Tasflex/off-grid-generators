@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { useState } from 'react'
 import {Calendar, Star, Check, X, Zap, Battery, Stethoscope, Info, AlertTriangle, Clock} from 'lucide-react'
 
@@ -334,6 +335,7 @@ export default function CPAPSolarGeneratorGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['pass-through-charging-ups-power-station', 'winter-power-outage-checklist', 'watts-vs-watt-hours-explained', 'keep-internet-on-power-outage']} />
     </div>
   )
 }

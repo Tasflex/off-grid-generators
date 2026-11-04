@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Camp, Sun, Battery, Zap, Check, ArrowRight, Calendar, Clock, Info, Flashlight } from 'lucide-react'
 
 export default function CampingSolarGuide() {
@@ -176,6 +177,7 @@ export default function CampingSolarGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['portable-solar-panel-buying-guide', '12v-fridge-off-grid-power', 'charge-power-station-from-car', 'lifepo4-battery-cold-weather']} />
     </div>
   )
 }

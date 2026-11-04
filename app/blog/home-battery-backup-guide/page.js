@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Home, Battery, Zap, Check, X, ArrowRight, Calendar, Clock, Info, Shield } from 'lucide-react'
 
 export default function HomeBatteryBackupGuide() {
@@ -168,6 +169,7 @@ export default function HomeBatteryBackupGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['transfer-switch-vs-interlock-kit', 'well-pump-power-outage', 'sump-pump-battery-backup', '12v-vs-24v-vs-48v-solar-system']} />
     </div>
   )
 }

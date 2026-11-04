@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { useState } from 'react'
 import { Star, Battery, Zap, Weight, Check, X, TrendingUp, Calendar, Clock } from 'lucide-react'
 import ProductCard from '../../../components/ProductCard'
@@ -472,6 +473,7 @@ export default function BestSolarGenerators2026() {
           <button type="submit" className="ebay-btn-primary whitespace-nowrap">Subscribe</button>
         </form>
       </div>
+      <RelatedPosts slugs={['watts-vs-watt-hours-explained', 'surge-watts-vs-running-watts', 'portable-solar-panel-buying-guide', 'power-station-storage-maintenance']} />
     </div>
   )
 }

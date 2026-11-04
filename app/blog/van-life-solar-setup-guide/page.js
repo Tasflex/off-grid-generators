@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Caravan, Zap, Battery, Sun, Check, X, ArrowRight, Calendar, Clock, Info, AlertTriangle } from 'lucide-react'
 
 export default function VanLifeSolarSetupGuide() {
@@ -312,6 +313,7 @@ export default function VanLifeSolarSetupGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['charge-power-station-from-car', '12v-fridge-off-grid-power', 'lifepo4-battery-cold-weather', 'mppt-vs-pwm-charge-controller']} />
     </div>
   )
 }

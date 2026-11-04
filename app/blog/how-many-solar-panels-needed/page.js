@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Sun, Zap, Battery, Check, X, ArrowRight, Calendar, Clock, Info, Calculator } from 'lucide-react'
 
 export default function HowManySolarPanelsNeeded() {
@@ -186,6 +187,7 @@ export default function HowManySolarPanelsNeeded() {
           ))}
         </div>
       </div>
+      <RelatedPosts slugs={['why-solar-panels-produce-less-than-rated', 'mppt-vs-pwm-charge-controller', 'portable-solar-panel-buying-guide', 'tiny-house-solar-system']} />
     </div>
   )
 }
