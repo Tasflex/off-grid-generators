@@ -433,6 +433,7 @@ export default function AutomationDashboard() {
                   >
                     <option value="pinterest">Pinterest</option>
                     <option value="instagram">Instagram</option>
+                    <option value="threads">Threads</option>
                     <option value="twitter">Twitter/X</option>
                     <option value="facebook">Facebook</option>
                     <option value="linkedin">LinkedIn</option>
@@ -588,7 +589,7 @@ export default function AutomationDashboard() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Platforms</label>
                 <div className="flex flex-wrap gap-2">
-                  {['pinterest', 'instagram', 'twitter', 'facebook', 'linkedin'].map(platform => (
+                  {['pinterest', 'instagram', 'threads', 'twitter', 'facebook', 'linkedin'].map(platform => (
                     <button
                       key={platform}
                       type="button"

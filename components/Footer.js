@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube, FaPinterestP } from 'react-icons/fa6'
+import { FaFacebookF, FaInstagram, FaThreads, FaXTwitter, FaYoutube, FaPinterestP } from 'react-icons/fa6'
 
 
 export default function Footer() {
@@ -20,6 +20,9 @@ export default function Footer() {
               </a>
               <a href="https://www.instagram.com/loadcalc/" className="hover:text-white" aria-label="Instagram">
                 <FaInstagram className="h-5 w-5" />
+              </a>
+              <a href="https://www.threads.com/@loadcalc" className="hover:text-white" aria-label="Threads">
+                <FaThreads className="h-5 w-5" />
               </a>
               <a href="https://www.pinterest.com/theloadcac/" className="hover:text-white" aria-label="Pinterest">
                 <FaPinterestP className="h-5 w-5" />

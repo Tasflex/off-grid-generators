@@ -68,22 +68,14 @@ export async function POST(request) {
         continue
       }
       
-      // For Pinterest, include board_id
-      const zernioData = {
-        text: summaries[platform],
+      const result = await publishToZernio({
+        content: summaries[platform],
         images: images,
-        platforms: [platform]
-      }
-      
-      // Add Pinterest board ID if applicable
-      if (platform === 'pinterest' && account.board_id) {
-        zernioData.board_id = account.board_id
-      }
-      
-      // Add copy_id for Zernio
-      zernioData.copy_id = account.copy_id
-      
-      const result = await publishToZernio(zernioData)
+        platforms: [platform],
+        copyId: account.copy_id,
+        boardId: platform === 'pinterest' ? account.board_id : undefined,
+        platformSpecificContent: { [platform]: summaries[platform] }
+      })
       publishResults[platform] = result
     }
 
