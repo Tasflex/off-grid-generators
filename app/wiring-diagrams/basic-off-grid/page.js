@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Sun, Wrench, Battery, Zap, Home, Check, X, Info, AlertTriangle, ArrowRight, Calendar, Clock, Download, Printer } from 'lucide-react'
 
 export default function BasicOffGridDiagram() {
@@ -358,6 +359,7 @@ export default function BasicOffGridDiagram() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/shed-solar-system', '/wiring-diagrams/system-grounding', '/guides/solar-power-for-beginners', '/guides/off-grid-solar-system-sizing']} title="Related guides and diagrams" />
     </div>
   )
 }

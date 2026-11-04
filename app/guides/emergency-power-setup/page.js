@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Shield, Check, X, AlertTriangle, Info, ArrowRight, Home, Zap, Battery, Clock, Calendar, Lightbulb, Phone, Refrigerator, Wifi, Heart } from 'lucide-react'
 
 export default function EmergencyPowerSetupGuide() {
@@ -363,6 +364,7 @@ export default function EmergencyPowerSetupGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/hurricane-power-preparedness', '/wiring-diagrams/power-station-home-inlet', '/wiring-diagrams/ac-subpanel', '/blog/transfer-switch-vs-interlock-kit']} title="Related guides and diagrams" />
     </div>
   )
 }

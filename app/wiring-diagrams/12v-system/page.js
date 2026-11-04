@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Sun, Info, AlertTriangle, ArrowRight, Calendar, Clock, Check, X, Battery, Zap, Home, Caravan } from 'lucide-react'
 
 export default function TwelveVoltSystemDiagram() {
@@ -295,6 +296,7 @@ export default function TwelveVoltSystemDiagram() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/dc-fuse-block-busbar', '/wiring-diagrams/van-complete-system', '/wiring-diagrams/shed-solar-system', '/guides/solar-fuse-and-breaker-sizing']} title="Related guides and diagrams" />
     </div>
   )
 }

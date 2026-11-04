@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Sun, Zap, AlertTriangle, Check, X, ArrowRight, Calendar, Clock, Info, Battery } from 'lucide-react'
 
 export default function PanelSeriesParallelDiagram() {
@@ -535,6 +536,7 @@ export default function PanelSeriesParallelDiagram() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/east-west-array', '/wiring-diagrams/multiple-charge-controllers', '/guides/solar-fuse-and-breaker-sizing', '/blog/why-solar-panels-produce-less-than-rated']} title="Related guides and diagrams" />
     </div>
   )
 }

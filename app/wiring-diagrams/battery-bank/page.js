@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Battery, Info, AlertTriangle, ArrowRight, Calendar, Clock, Check, X } from 'lucide-react'
 
 export default function BatteryBankWiringDiagram() {
@@ -248,6 +249,7 @@ export default function BatteryBankWiringDiagram() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/parallel-battery-bank-balanced', '/wiring-diagrams/battery-monitor-shunt', '/guides/how-to-choose-solar-batteries', '/blog/12v-vs-24v-vs-48v-solar-system']} title="Related guides and diagrams" />
     </div>
   )
 }

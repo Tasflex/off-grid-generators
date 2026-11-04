@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { Zap, Battery, Sun, Home, Caravan, ArrowRight, Layout, Wrench, Info } from 'lucide-react'
+import { diagrams as dataDiagrams } from '../../lib/wiring/diagrams'
 
-const diagramCategories = [
+// Hand-built diagrams by category; data-driven diagrams from lib/wiring join their matching category
+const handBuiltCategories = [
   {
     title: 'Off-Grid System Diagrams',
     description: 'Complete solar power system wiring diagrams',
@@ -37,8 +39,30 @@ const diagramCategories = [
       { title: 'Inverter Connection', href: '/wiring-diagrams/inverter-connection', description: 'DC to AC conversion' },
       { title: 'Charge Controller Setup', href: '/wiring-diagrams/charge-controller', description: 'MPPT & PWM controllers' }
     ]
+  },
+  {
+    title: 'Vehicle, RV & Marine',
+    description: 'Vans, RVs, trucks and boats',
+    icon: Caravan,
+    color: 'bg-purple-100 text-purple-600',
+    diagrams: []
+  },
+  {
+    title: 'Home Backup & Grid-Tie',
+    description: 'Backup power and grid-connected solar',
+    icon: Home,
+    color: 'bg-red-100 text-red-600',
+    diagrams: []
   }
 ]
+
+const diagramCategories = handBuiltCategories.map(c => ({
+  ...c,
+  diagrams: [
+    ...c.diagrams,
+    ...dataDiagrams.filter(d => d.category === c.title).map(d => ({ title: d.title.replace(/ Wiring Diagram$| Diagram$/, ''), href: d.path, description: `${d.voltage} · ${d.difficulty}` }))
+  ]
+}))
 
 export default function WiringDiagramsPage() {
   return (

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Check, X, AlertTriangle, Info, ArrowRight, Caravan, Battery, Zap, Sun, Plug, Shield, Wrench, DollarSign, Home, Thermometer, Fan, Refrigerator, Laptop, Phone } from 'lucide-react'
 
 export default function RVPowerSystemsGuide() {
@@ -438,6 +439,7 @@ export default function RVPowerSystemsGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/rv-lithium-battery-upgrade', '/wiring-diagrams/shore-power-rv', '/wiring-diagrams/dc-dc-charger-wiring', '/wiring-diagrams/battery-monitor-shunt']} title="Related guides and diagrams" />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Check, X, AlertTriangle, Info, ArrowRight, Sun, Calculator, Home, Zap, Battery, TrendingUp, Lightbulb, Refrigerator, Laptop } from 'lucide-react'
 
 export default function HowManySolarPanelsGuide() {
@@ -384,6 +385,7 @@ export default function HowManySolarPanelsGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/off-grid-solar-system-sizing', '/guides/solar-power-for-beginners', '/wiring-diagrams/east-west-array', '/blog/why-solar-panels-produce-less-than-rated']} title="Related guides and diagrams" />
     </div>
   )
 }

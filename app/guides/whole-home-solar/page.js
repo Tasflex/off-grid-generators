@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Check, X, AlertTriangle, Info, ArrowRight, Home, Battery, Sun, Zap, Shield, DollarSign, Wrench, TrendingUp, Award, Thermometer, Refrigerator, Wifi, Lightbulb } from 'lucide-react'
 
 export default function WholeHomeSolarGuide() {
@@ -452,6 +453,7 @@ export default function WholeHomeSolarGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/grid-tie-vs-off-grid-vs-hybrid', '/wiring-diagrams/grid-tie-microinverter', '/wiring-diagrams/hybrid-inverter-battery', '/wiring-diagrams/east-west-array']} title="Related guides and diagrams" />
     </div>
   )
 }

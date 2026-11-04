@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Lightbulb, Clock, Check, X, AlertTriangle, Info, ArrowRight, Heart, Battery, Zap, Plug, Sun, Car, Shield, Activity } from 'lucide-react'
 
 export default function MedicalDevicePowerGuide() {
@@ -318,6 +319,7 @@ export default function MedicalDevicePowerGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/blog/pass-through-charging-ups-power-station', '/guides/hurricane-power-preparedness', '/wiring-diagrams/power-station-home-inlet', '/blog/winter-power-outage-checklist']} title="Related guides and diagrams" />
     </div>
   )
 }

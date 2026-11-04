@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Check, X, AlertTriangle, Info, ArrowRight, Calculator, Battery, Zap, Clock as ClockIcon, TrendingUp, Lightbulb, Refrigerator, Laptop, Phone } from 'lucide-react'
 
 export default function CalculateBatteryRuntimeGuide() {
@@ -341,6 +342,7 @@ export default function CalculateBatteryRuntimeGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/battery-monitor-setup', '/guides/how-to-choose-solar-batteries', '/guides/off-grid-solar-system-sizing', '/blog/watts-vs-watt-hours-explained']} title="Related guides and diagrams" />
     </div>
   )
 }

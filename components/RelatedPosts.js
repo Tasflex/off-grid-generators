@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { getBlogPostMeta } from '../lib/blog/posts'
+import { getArticleCard } from '../lib/articleIndex'
 
-// "Related reading" cards for blog posts, linking to entries in lib/blog/posts.js
+// "Related reading" cards for hand-built pages, linking to data-driven blog posts, guides and
+// wiring diagrams. `slugs` takes site paths or bare blog slugs.
 export default function RelatedPosts({ slugs, title = 'Related reading' }) {
-  const posts = slugs.map(getBlogPostMeta).filter(Boolean)
+  const posts = slugs.map(getArticleCard).filter(Boolean)
   if (!posts.length) return null
 
   return (
@@ -12,7 +13,7 @@ export default function RelatedPosts({ slugs, title = 'Related reading' }) {
       <h2 className="text-xl font-bold text-gray-900 mb-4">{title}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {posts.map(p => (
-          <Link key={p.slug} href={p.path} className="ebay-card overflow-hidden hover:shadow-md transition flex flex-col">
+          <Link key={p.path} href={p.path} className="ebay-card overflow-hidden hover:shadow-md transition flex flex-col">
             <img src={p.image} alt="" loading="lazy" className="w-full h-36 object-cover" />
             <div className="p-4 flex-1">
               <span className="text-xs font-semibold text-blue-600">{p.category}</span>

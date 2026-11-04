@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Check, X, AlertTriangle, Info, ArrowRight, Home, Battery, Zap, Shield, DollarSign, Wrench, Lightbulb, Refrigerator, Wifi, Phone, Heart, Thermometer, Fan } from 'lucide-react'
 
 export default function HomeBackupSystemsGuide() {
@@ -422,6 +423,7 @@ export default function HomeBackupSystemsGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/hybrid-inverter-battery', '/wiring-diagrams/ac-subpanel', '/guides/grid-tie-vs-off-grid-vs-hybrid', '/wiring-diagrams/power-station-home-inlet']} title="Related guides and diagrams" />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Star, Check, X, Zap, Battery, Weight, DollarSign, ArrowRight, Award, Shield, Home, TrendingUp, Info } from 'lucide-react'
 
 export default function BestBatteryBackupSystems() {
@@ -414,6 +415,7 @@ export default function BestBatteryBackupSystems() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/how-to-choose-solar-batteries', '/wiring-diagrams/hybrid-inverter-battery', '/guides/hurricane-power-preparedness', '/wiring-diagrams/power-station-home-inlet']} title="Related guides and diagrams" />
     </div>
   )
 }

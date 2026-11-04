@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Battery, Zap, AlertTriangle, Check, X, ArrowRight, Calendar, Clock, Info } from 'lucide-react'
 
 export default function InverterConnectionDiagram() {
@@ -242,6 +243,7 @@ export default function InverterConnectionDiagram() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/ac-subpanel', '/wiring-diagrams/split-phase-240v-inverters', '/guides/how-to-choose-an-inverter', '/guides/solar-fuse-and-breaker-sizing']} title="Related guides and diagrams" />
     </div>
   )
 }

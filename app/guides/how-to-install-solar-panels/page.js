@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Check, X, AlertTriangle, Info, ArrowRight, Wrench, Drill, Shield, Sun, Home, Battery, Zap, Clipboard, Gauge } from 'lucide-react'
 
 export default function HowToInstallSolarPanels() {
@@ -370,6 +371,7 @@ export default function HowToInstallSolarPanels() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/ground-mount-solar-installation', '/guides/solar-cable-and-connector-guide', '/wiring-diagrams/system-grounding', '/guides/solar-panel-maintenance']} title="Related guides and diagrams" />
     </div>
   )
 }

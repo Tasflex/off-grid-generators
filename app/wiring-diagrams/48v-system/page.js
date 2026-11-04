@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Sun, Info, AlertTriangle, ArrowRight, Calendar, Clock, Check, X, Battery, Zap, Home } from 'lucide-react'
 
 export default function FortyEightVoltSystemDiagram() {
@@ -263,6 +264,7 @@ export default function FortyEightVoltSystemDiagram() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/generator-backup-off-grid', '/wiring-diagrams/split-phase-240v-inverters', '/wiring-diagrams/hybrid-inverter-battery', '/guides/off-grid-cabin-solar']} title="Related guides and diagrams" />
     </div>
   )
 }

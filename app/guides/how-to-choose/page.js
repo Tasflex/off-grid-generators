@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { useState } from 'react'
 import { Calendar, Clock, Star, Check, X, Zap, Battery, Weight, DollarSign, ArrowRight, Home, Caravan, Tent, Shield, Calculator, AlertTriangle, Info } from 'lucide-react'
 
@@ -633,6 +634,7 @@ export default function HowToChooseGuide() {
           <p className="text-sm text-gray-600">Get instant personalized recommendations</p>
         </Link>
       </div>
+      <RelatedPosts slugs={['/guides/how-to-choose-an-inverter', '/guides/how-to-choose-solar-batteries', '/guides/diy-solar-generator-build', '/guides/solar-power-for-beginners']} title="Related guides and diagrams" />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Star, Check, X, Zap, Battery, Weight, DollarSign, ArrowRight, Shield, Award, TrendingUp, Info, AlertTriangle } from 'lucide-react'
 
 export default function BestSolarGenerators2026() {
@@ -405,6 +406,7 @@ export default function BestSolarGenerators2026() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/solar-power-for-beginners', '/wiring-diagrams/portable-panel-power-station', '/guides/diy-solar-generator-build', '/guides/hurricane-power-preparedness']} title="Related guides and diagrams" />
     </div>
   )
 }

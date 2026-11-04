@@ -1,5 +1,7 @@
 import { deviceCalculators } from '../lib/calc'
 import { blogPosts } from '../lib/blog/posts'
+import { guides } from '../lib/guides/guides'
+import { diagrams } from '../lib/wiring/diagrams'
 
 export default function sitemap() {
   const baseUrl = 'https://theloadcalc.com'
@@ -196,13 +198,13 @@ export default function sitemap() {
     priority: 0.8
   }))
 
-  // Data-driven blog posts (app/blog/[slug])
-  const blogRoutes = blogPosts.map(p => ({
-    url: `${baseUrl}${p.path}`,
-    lastModified: new Date(p.date),
+  // Data-driven blog posts, guides and wiring diagrams (app/blog, app/guides, app/wiring-diagrams [slug] routes)
+  const articleRoutes = [...blogPosts, ...guides, ...diagrams].map(a => ({
+    url: `${baseUrl}${a.path}`,
+    lastModified: new Date(a.date),
     changeFrequency: 'monthly',
     priority: 0.8
   }))
 
-  return [...routes, ...deviceRoutes, ...blogRoutes]
+  return [...routes, ...deviceRoutes, ...articleRoutes]
 }

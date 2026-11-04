@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Caravan, Check, X, Zap, Battery, Sun, Info, AlertTriangle, ArrowRight, Calendar, Clock, Wrench, Lightbulb, Refrigerator, Laptop, Phone, Fan } from 'lucide-react'
 
 export default function VanLifeSolarSizingGuide() {
@@ -275,6 +276,7 @@ export default function VanLifeSolarSizingGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/van-complete-system', '/wiring-diagrams/dc-dc-charger-wiring', '/guides/battery-monitor-setup', '/blog/12v-fridge-off-grid-power']} title="Related guides and diagrams" />
     </div>
   )
 }

@@ -1,78 +1,93 @@
 'use client'
 
 import Link from 'next/link'
-import { BookOpen, Wrench, Calculator, Shield, Home, Caravan } from 'lucide-react'
+import { BookOpen, Wrench, Calculator, Shield, ShieldCheck, Home, Caravan, Compass } from 'lucide-react'
+import { guides as dataGuides } from '../../lib/guides/guides'
 
-const guideCategories = [
+// Hand-built guides by category; data-driven guides from lib/guides join their matching category
+const handBuiltCategories = [
+  {
+    title: 'Planning & Sizing',
+    description: 'Understand solar and size a system that fits your needs',
+    icon: Compass,
+    guides: [
+      { title: 'How Many Solar Panels Do I Need?', href: '/guides/how-many-solar-panels-do-i-need' },
+      { title: 'How to Calculate Battery Runtime', href: '/guides/calculate-battery-runtime' }
+    ]
+  },
   {
     title: 'Buying Guides',
     description: 'Comprehensive guides to help you choose the right products',
     icon: BookOpen,
-    href: '/guides/buying-guides',
     guides: [
+      { title: 'How to Choose a Solar Generator', href: '/guides/how-to-choose' },
       { title: 'Best Solar Generators 2026', href: '/guides/best-solar-generators-2026' },
       { title: 'Best Portable Power Stations', href: '/guides/best-portable-power-stations' },
-      { title: 'Best Battery Backup Systems', href: '/guides/best-battery-backup-systems' },
+      { title: 'Best Battery Backup Systems', href: '/guides/best-battery-backup-systems' }
     ]
   },
   {
     title: 'How-To Guides',
     description: 'Step-by-step tutorials for setup and installation',
     icon: Wrench,
-    href: '/guides/how-to-choose',
     guides: [
-      { title: 'How to Choose a Solar Generator', href: '/guides/how-to-choose-solar-generator' },
       { title: 'How to Wire a Solar System', href: '/guides/how-to-wire-solar-system' },
-      { title: 'How to Install Solar Panels', href: '/guides/how-to-install-solar-panels' },
-      { title: 'How to Many Solar Panels Do I Need?', href: '/guides/how-many-solar-panels-do-i-need' },
-      { title: 'How to Calculate Battery Runtime', href: '/guides/calculate-battery-runtime' },
+      { title: 'How to Install Solar Panels', href: '/guides/how-to-install-solar-panels' }
     ]
   },
   {
-    title: 'Calculators & Tools',
-    description: 'Interactive tools to help you plan your system',
-    icon: Calculator,
-    href: '/calculators',
-    guides: [
-      { title: 'Solar Sizing Calculator', href: '/calculators/solar-sizing' },
-      { title: 'Battery Runtime Calculator', href: '/calculators/battery-runtime' },
-      { title: 'Off-Grid Budget Calculator', href: '/calculators/off-grid-budget' },
-    ]
+    title: 'Installation & Safety',
+    description: 'Cables, fuses, maintenance and troubleshooting',
+    icon: ShieldCheck,
+    guides: []
   },
   {
     title: 'Emergency Preparedness',
     description: 'Plan for power outages and emergencies',
     icon: Shield,
-    href: '/guides/emergency-preparedness',
     guides: [
       { title: 'Emergency Power Setup', href: '/guides/emergency-power-setup' },
       { title: 'Blackout Survival Guide', href: '/guides/blackout-survival-guide' },
-      { title: 'Medical Device Power', href: '/guides/medical-device-power' },
+      { title: 'Medical Device Power', href: '/guides/medical-device-power' }
     ]
   },
   {
     title: 'Van Life & RV',
     description: 'Power solutions for mobile living',
     icon: Caravan,
-    href: '/guides/van-life',
     guides: [
       { title: 'Van Life Solar Sizing', href: '/guides/van-life-solar-sizing' },
       { title: 'RV Power Systems', href: '/guides/rv-power-systems' },
-      { title: 'Camping Power Solutions', href: '/guides/camping-power-solutions' },
+      { title: 'Camping Power Solutions', href: '/guides/camping-power-solutions' }
     ]
   },
   {
     title: 'Home & Off-Grid',
     description: 'Complete home power solutions',
     icon: Home,
-    href: '/guides/off-grid-living',
     guides: [
       { title: 'Complete Off-Grid Living Guide', href: '/guides/complete-off-grid-living-guide' },
       { title: 'Home Backup Systems', href: '/guides/home-backup-systems' },
-      { title: 'Whole Home Solar', href: '/guides/whole-home-solar' },
+      { title: 'Whole Home Solar', href: '/guides/whole-home-solar' }
+    ]
+  },
+  {
+    title: 'Calculators & Tools',
+    description: 'Interactive tools to help you plan your system',
+    icon: Calculator,
+    guides: [
+      { title: 'Solar Sizing Calculator', href: '/calculators/solar-sizing' },
+      { title: 'Battery Runtime Calculator', href: '/calculators/battery-runtime' },
+      { title: 'Off-Grid Budget Calculator', href: '/calculators/off-grid-budget' },
+      { title: 'All Calculators', href: '/calculators' }
     ]
   }
 ]
+
+const guideCategories = handBuiltCategories.map(c => ({
+  ...c,
+  guides: [...dataGuides.filter(g => g.category === c.title).map(g => ({ title: g.title, href: g.path })), ...c.guides]
+}))
 
 export default function GuidesPage() {
   return (
@@ -105,7 +120,7 @@ export default function GuidesPage() {
                 <h2 className="text-lg font-bold text-gray-900">{category.title}</h2>
               </div>
               <p className="text-sm text-gray-600 mb-4">{category.description}</p>
-              <ul className="space-y-2 mb-4">
+              <ul className="space-y-2">
                 {category.guides.map(guide => (
                   <li key={guide.href}>
                     <Link href={guide.href} className="text-sm text-blue-600 hover:underline">
@@ -114,9 +129,6 @@ export default function GuidesPage() {
                   </li>
                 ))}
               </ul>
-              <Link href={category.href} className="text-sm font-medium text-blue-600 hover:underline">
-                View All →
-              </Link>
             </div>
           )
         })}
@@ -133,7 +145,7 @@ export default function GuidesPage() {
               Everything you need to know before purchasing your first solar generator.
             </p>
           </div>
-          <Link href="/guides/how-to-choose-solar-generator" className="ebay-btn-primary">
+          <Link href="/guides/how-to-choose" className="ebay-btn-primary">
             Read the Guide
           </Link>
         </div>

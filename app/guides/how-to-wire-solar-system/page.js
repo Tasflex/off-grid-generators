@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { useState } from 'react'
 import { Calendar, Clock, Wrench, Check, X, AlertTriangle, Info, ArrowRight, Battery, Zap, Sun } from 'lucide-react'
 
@@ -379,6 +380,7 @@ export default function HowToWireSolarSystem() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/solar-cable-and-connector-guide', '/guides/solar-fuse-and-breaker-sizing', '/wiring-diagrams/dc-fuse-block-busbar', '/wiring-diagrams/system-grounding']} title="Related guides and diagrams" />
     </div>
   )
 }

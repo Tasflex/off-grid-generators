@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Calendar, Clock, Star, Check, X, Zap, Battery, Weight, DollarSign, ArrowRight, Award, TrendingUp, Info, Camp, Caravan, Home } from 'lucide-react'
 
 export default function BestPortablePowerStations() {
@@ -414,6 +415,7 @@ export default function BestPortablePowerStations() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/portable-panel-power-station', '/guides/diy-solar-generator-build', '/guides/apartment-solar-power', '/blog/power-station-storage-maintenance']} title="Related guides and diagrams" />
     </div>
   )
 }

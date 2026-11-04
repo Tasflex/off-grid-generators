@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Sun, Battery, Zap, AlertTriangle, Check, X, ArrowRight, Calendar, Clock, Info } from 'lucide-react'
 
 export default function ChargeControllerSetupDiagram() {
@@ -264,6 +265,7 @@ export default function ChargeControllerSetupDiagram() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/wiring-diagrams/multiple-charge-controllers', '/guides/how-to-choose-a-charge-controller', '/wiring-diagrams/east-west-array', '/blog/mppt-vs-pwm-charge-controller']} title="Related guides and diagrams" />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import RelatedPosts from '../../../components/RelatedPosts'
 import { Check, Zap, Battery, Info, AlertTriangle, ArrowRight, Calendar, Clock, Lightbulb, Refrigerator, Phone, Wifi, Fan, Stethoscope, Droplets, Flame } from 'lucide-react'
 
 export default function BlackoutSurvivalGuide() {
@@ -297,6 +298,7 @@ export default function BlackoutSurvivalGuide() {
           </Link>
         </div>
       </div>
+      <RelatedPosts slugs={['/guides/hurricane-power-preparedness', '/wiring-diagrams/power-station-home-inlet', '/blog/winter-power-outage-checklist', '/wiring-diagrams/ac-subpanel']} title="Related guides and diagrams" />
     </div>
   )
 }
